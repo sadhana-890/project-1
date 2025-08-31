@@ -4,14 +4,14 @@ import { signToken } from "@/lib/jwt";
 
 export async function POST(req: Request) {
   try {
-    const { id, name, role } = await req.json();
+    const { id, name,email, role } = await req.json();
 
     // basic validation
     if (!id || !name ) {
       return NextResponse.json({ success: false, error: "Missing fields" }, { status: 400 });
     }
 
-    const token = await signToken({ id, name, role });
+    const token = await signToken({ id, name,email, role });
 
     const res = NextResponse.json({ success: true });
 

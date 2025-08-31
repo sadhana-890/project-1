@@ -1,6 +1,6 @@
 import { mockUsers, MockUser } from "./mockUsers";
 
-export function seedUsers() {
+/* export function seedUsers() {
   if (mockUsers.length > 0) {
     console.log(" Users already seeded");
     return;
@@ -15,4 +15,4 @@ export function seedUsers() {
   mockUsers.push(...defaultUsers);
 
   console.log("Users seeded:", mockUsers);
-}
+} */

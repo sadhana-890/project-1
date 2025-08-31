@@ -14,7 +14,7 @@ const secret = new TextEncoder().encode(secretKey);
 // keep the same role union as your AuthContext to avoid type errors
 type Role = "user" | "admin" | "superadmin";
 
-export async function signToken(payload: { id: number; name: string; role: Role }) {
+export async function signToken(payload: { id: number; name: string;email:string; role: Role }) {
   return await new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setExpirationTime("1h")
@@ -25,7 +25,7 @@ export async function verifyToken(token: string) {
   try {
     const { payload } = await jwtVerify(token, secret);
     // Cast to your shape; in a real app you’d validate
-    return payload as { id: number; name: string; role: Role };
+    return payload as { id: number; name: string;email:string, role: Role };
   } catch {
     return null;
   }

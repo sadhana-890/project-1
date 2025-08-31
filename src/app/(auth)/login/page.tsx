@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -6,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import Header from "@/app/header/page";
 import Footer from "@/app/footer/page";
 import { Label } from "@/components/ui/label";
-
+import { Eye, EyeOff } from "lucide-react";
 
 import { seedUsers, getUsers } from "@/lib/mockUsers";
 
@@ -17,6 +18,7 @@ type LoginFormInputs = {
 
 export default function LoginPage() {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
 
   // Seed mock users once when app runs
   seedUsers();
@@ -28,46 +30,49 @@ export default function LoginPage() {
     setError,
   } = useForm<LoginFormInputs>();
 
-const onSubmit = async (data: LoginFormInputs) => {
-  const users = getUsers();
-  const user = users.find(
-    (u) => u.email === data.email && u.password === data.password
-  );
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
-  if (!user) {
-    setError("email", { message: "Invalid email or password" });
-    setError("password", { message: "Invalid email or password" });
-    return;
-  }
+  const onSubmit = async (data: LoginFormInputs) => {
+    const users = getUsers();
+    const user = users.find(
+      (u) => u.email === data.email && u.password === data.password
+    );
 
-  console.log("Login success:", user);
+    if (!user) {
+      setError("email", { message: "Invalid email or password" });
+      setError("password", { message: "Invalid email or password" });
+      return;
+    }
 
-  // 🔑 Call login API to set JWT cookie
-  const res = await fetch("/api/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      id: user.id,
-      name: user.email, // or actual name if you add it
-      role: user.role,
-    }),
-  });
+    console.log("Login success:", user);
 
-  if (!res.ok) {
-    console.error("Login API failed");
-    return;
-  }
+    // 🔑 Call login API to set JWT cookie
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: user.id,
+        name: user.email, // or actual name if you add it
+        role: user.role,
+      }),
+    });
 
-  // ✅ Once cookie is set, then redirect
-  if (user.role === "admin") {
-    router.push("/admin");
-  } else if (user.role === "superadmin") {
-    router.push("/superadmin");
-  } else {
-    router.push("/dashboard");
-  }
-};
+    if (!res.ok) {
+      console.error("Login API failed");
+      return;
+    }
 
+    // ✅ Once cookie is set, then redirect
+    if (user.role === "admin") {
+      router.push("/admin");
+    } else if (user.role === "superadmin") {
+      router.push("/superadmin");
+    } else {
+      router.push("/dashboard");
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -100,15 +105,28 @@ const onSubmit = async (data: LoginFormInputs) => {
             </div>
           </div>
 
-          {/* Password field */}
+          {/* Password field with toggle */}
           <div className="flex justify-center">
             <div className="w-full max-w-md">
               <Label className="block text-sm font-medium mb-1">Password</Label>
-              <Input
-                type="password"
-                className="  w-full sm:max-w-md md:max-w-lg h-12 px-4 border border-gray-300 rounded-md shadow-none"
-                {...register("password", { required: "Password is required" })}
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  className="w-full sm:max-w-md md:max-w-lg h-12 px-4 pr-12 border border-gray-300 rounded-md shadow-none"
+                  {...register("password", { required: "Password is required" })}
+                />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none transition-colors"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
               {errors.password && (
                 <p className="text-red-500 text-sm">{errors.password.message}</p>
               )}
@@ -123,7 +141,6 @@ const onSubmit = async (data: LoginFormInputs) => {
             >
               Login
             </Button>
-
           </div>
         </form>
       </main>

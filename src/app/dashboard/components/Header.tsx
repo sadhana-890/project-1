@@ -3,13 +3,19 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
+import { Menu } from "lucide-react";
 
 interface User {
   name: string;
   role: string;
 }
 
-export default function Header() {
+interface HeaderProps {
+  isMobileMenuOpen: boolean;
+  setIsMobileMenuOpen: (open: boolean) => void;
+}
+
+export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: HeaderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [notifications, setNotifications] = useState<number>(0);
   const [search, setSearch] = useState("");
@@ -23,41 +29,51 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="flex justify-between items-center px-4 py-0.6">
-      {/* Left - Search */}
-      <div className="flex items-center w-1/3">
-        <div className="relative w-[320px]">
-    <Image
-        src="/icons/search.svg"
-        alt="Search"
-        width={18}
-        height={18}
-        className="absolute left-3 top-1/2 -translate-y-1/2"
-    />
+    <header className="flex justify-between items-center px-4 py-3 border-b bg-white sticky top-0 z-20">
+      {/* Left - Mobile Hamburger + Search */}
+      <div className="flex items-center gap-3 w-1/3">
+        {/* Mobile Hamburger Button */}
+        <button
+          onClick={() => setIsMobileMenuOpen(true)}
+          className="lg:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+        >
+          <Menu className="h-5 w-5 text-gray-600" />
+        </button>
 
-    <Input
-        type="text"
-        placeholder="Search App"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="h-12 w-[320px] pl-10 pr-4 border border-gray-300 rounded-full focus:outline-none focus:ring-indigo-500 shadow-none"
-    />
-    </div>
-
+        {/* Search Bar */}
+        <div className="relative w-full max-w-[320px]">
+          <Image
+            src="/icons/search.svg"
+            alt="Search"
+            width={18}
+            height={18}
+            className="absolute left-3 top-1/2 -translate-y-1/2"
+          />
+          <Input
+            type="text"
+            placeholder="Search App"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="h-12 w-full pl-10 pr-4 border border-gray-300 rounded-full focus:outline-none focus:ring-indigo-500 shadow-none"
+          />
+        </div>
       </div>
 
+ 
+
       {/* Right - Notifications + Profile */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-4 lg:gap-6">
         {/* Notification Bell */}
         <div className="relative">
           <Image
-          src="/icons/notification.svg"
-          alt="Search"
-          width={20}
-          height={20} 
-          className="w-6 h-6 text-gray-600 cursor-pointer" />
+            src="/icons/notification.svg"
+            alt="Notifications"
+            width={20}
+            height={20}
+            className="w-6 h-6 text-gray-600 cursor-pointer"
+          />
           {notifications > 0 && (
-            <span className="absolute top-0 right-0 block w-2.5 h-2.5 rounded-full bg-red-500"></span>
+            <span className="absolute -top-1 -right-1 block w-2.5 h-2.5 rounded-full bg-red-500"></span>
           )}
         </div>
 
@@ -65,7 +81,7 @@ export default function Header() {
         {user && (
           <div className="flex items-center space-x-3 px-3 py-1 border rounded-full cursor-pointer hover:bg-gray-50">
             <div className="w-8 h-8 rounded-full bg-gray-300" />
-            <div className="flex flex-col leading-tight">
+            <div className="hidden sm:flex flex-col leading-tight">
               <span className="text-sm font-medium">{user.name}</span>
               <span className="text-xs text-gray-500">{user.role}</span>
             </div>
