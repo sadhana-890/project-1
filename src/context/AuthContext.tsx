@@ -7,7 +7,7 @@ export type User = { id: number; name: string;email:string; role: "user" | "admi
 
 type AuthContextType = {
   user: User;
-  login: (name: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 };
 

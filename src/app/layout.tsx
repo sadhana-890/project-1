@@ -4,7 +4,8 @@ import "./globals.css";
 
 import { AuthProvider } from "@/context/AuthContext";
 import { seedUsers } from "@/lib/mockUsers";
-
+import Header from "./header/page";
+import Footer from "./footer/page";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,12 +27,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   seedUsers();
+  
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          
+          {children}
+      
+        </AuthProvider>
       </body>
     </html>
   );

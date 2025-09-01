@@ -54,7 +54,7 @@ export default function LoginPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         id: user.id,
-        name: user.email, // or actual name if you add it
+        email: user.email, // or actual name if you add it
         role: user.role,
       }),
     });
@@ -75,8 +75,10 @@ export default function LoginPage() {
   };
 
   return (
+    <>
+    <Header/>
     <div className="flex flex-col min-h-screen">
-      <Header />
+      
       <main className="flex flex-col items-center flex-1 px-6 sm:px-20 lg:px-40 mt-10 sm:mt-[60px]">
         <h1 className="text-3xl sm:text-4xl lg:text-[56px] font-semibold text-center text-[#060535] mb-2 leading-tight">
           Log in to your Superapp Developer Account
@@ -144,7 +146,10 @@ export default function LoginPage() {
           </div>
         </form>
       </main>
-      <Footer />
+   
     </div>
+
+    <Footer/>
+    </>
   );
 }
