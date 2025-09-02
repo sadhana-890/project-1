@@ -5,6 +5,7 @@ import { Bell, Plus, ChevronDown, } from "lucide-react";
 import { metrics, apps, devLogs } from "@/lib/mockUsers";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 // ---- Mock Data ------------------------------------
 
 // ---- UI helpers -----------------------------------
@@ -35,6 +36,12 @@ const LogIcon: React.FC<{ type: "success" | "error" | "warning" }>=({ type })=>{
 export default function Component() {
    const { user } = useAuth();
 
+   // Debug: Log user data to see what's available
+   console.log("Dashboard - User data:", user);
+   console.log("Dashboard - User name:", user?.name);
+   console.log("Dashboard - User email:", user?.email);
+   console.log("Dashboard - User role:", user?.role);
+
    const appsMetrics = metrics.find(m => m.id === "apps");
    const consumptionMetrics = metrics.find(m => m.id === "consumption");
   return (
@@ -43,7 +50,12 @@ export default function Component() {
       <header className="sticky top-0 z-10  bg-white/80 backdrop-blur">
         <div className="flex items-center justify-between gap-4 px-6 py-4">
           <div>
-            <h1 className="text-2xl font-semibold">Welcome, {user ? user.name : "Guest"}!</h1>
+            <h1 className="text-2xl font-semibold flex items-center gap-2">
+              Welcome, {user ? user.name : "Guest"}!
+              {user?.role && (
+                <Badge variant="secondary" className="capitalize">{user.role}</Badge>
+              )}
+            </h1>
             <p className="text-sm text-slate-500">Manage your dApps, API keys, wallet integrations, and spin game features—all in one place.</p>
           </div>
 
@@ -109,16 +121,16 @@ export default function Component() {
                         </td>
                         <td className="px-5 py-4 text-slate-600">{app.createdOn}</td>
                         <td className="px-5 py-4">
-                          <StatusPill status={app.status} />
+                          {/* Replace local pill with Badge */}
+                          <Badge variant={app.status === "Active" ? "secondary" : "outline"} className="capitalize">
+                            {app.status}
+                          </Badge>
                         </td>
                         <td className="px-5 py-4 text-slate-600">
                           {app.users.toLocaleString()} users
                         </td>
                         <td className="px-5 py-4">
-                          <span className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs text-slate-700">
-                            {app.library}
-                          
-                          </span>
+                          <Badge variant="outline" className="capitalize">{app.library}</Badge>
                         </td>
                       </tr>
                     ))}
@@ -137,7 +149,19 @@ export default function Component() {
               {devLogs.map((log) => (
                 <li key={log.id} className="p-4">
                   <div className="flex items-start gap-3 rounded-2xl p-2 bg-[#184BFF1A] px-2 py-4 ">
-                    <LogIcon type={log.type} />
+                    {/* Log type badge */}
+                    <Badge
+                      className={
+                        log.type === "success"
+                          ? "bg-green-100 text-green-700 border-green-200"
+                          : log.type === "warning"
+                          ? "bg-yellow-100 text-yellow-800 border-yellow-200"
+                          : "bg-red-100 text-red-700 border-red-200"
+                      }
+                      variant="outline"
+                    >
+                      {log.type}
+                    </Badge>
                     <div >
                       <p className="text-sm font-medium leading-5">{log.title}</p>
                       <p className="mt-1 text-sm text-slate-700">{log.message}</p>

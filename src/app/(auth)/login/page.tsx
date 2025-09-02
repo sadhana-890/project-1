@@ -35,42 +35,40 @@ export default function LoginPage() {
   };
 
   const onSubmit = async (data: LoginFormInputs) => {
-    const users = getUsers();
-    const user = users.find(
-      (u) => u.email === data.email && u.password === data.password
-    );
+    console.log("Login attempt:", data.email);
 
-    if (!user) {
-      setError("email", { message: "Invalid email or password" });
-      setError("password", { message: "Invalid email or password" });
-      return;
-    }
-
-    console.log("Login success:", user);
-
-    // 🔑 Call login API to set JWT cookie
+    // 🔑 Call login API with email and password
     const res = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        id: user.id,
-        email: user.email, // or actual name if you add it
-        role: user.role,
+        email: data.email,
+        password: data.password,
       }),
     });
 
     if (!res.ok) {
-      console.error("Login API failed");
+      const errorData = await res.json().catch(() => ({}));
+      setError("email", { message: errorData.error || "Login failed" });
+      setError("password", { message: errorData.error || "Login failed" });
       return;
     }
 
-    // ✅ Once cookie is set, then redirect
-    if (user.role === "admin") {
-      router.push("/admin");
-    } else if (user.role === "superadmin") {
-      router.push("/superadmin");
+    // ✅ Login successful, redirect based on user role
+    // We need to get user info to determine role
+    const users = getUsers();
+    const user = users.find(u => u.email === data.email);
+    
+    if (user) {
+      if (user.role === "admin") {
+        router.push("/admin");
+      } else if (user.role === "superadmin") {
+        router.push("/superadmin");
+      } else {
+        router.push("/dashboard");
+      }
     } else {
-      router.push("/dashboard");
+      router.push("/dashboard"); // fallback
     }
   };
 
