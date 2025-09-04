@@ -20,12 +20,12 @@ export default function DashboardLayout({
       />
       
       {/* Main content */}
-      <main className="flex-1 lg:ml-64">
+      <main className="flex-1 lg:ml-55">
         <Header 
           isMobileMenuOpen={isMobileMenuOpen}
           setIsMobileMenuOpen={setIsMobileMenuOpen}
         />
-        <div className="p-6">
+        <div className="p-4">
           {children}
         </div>
       </main>

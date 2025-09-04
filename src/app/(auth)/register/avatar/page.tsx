@@ -6,6 +6,7 @@ import Header from '@/app/header/page';
 import Footer from '@/app/footer/page';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { useRouter } from 'next/navigation';
 
 const ProfilePictureSelector = () => {
   const avatars = [
@@ -16,6 +17,8 @@ const ProfilePictureSelector = () => {
     '/avatars/avatar5.svg',
     '/avatars/avatar6.svg'
   ];
+
+  const router = useRouter();
 
   const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
 
@@ -36,6 +39,7 @@ const ProfilePictureSelector = () => {
     console.log('Selected avatar:', selectedAvatar);
     sessionStorage.setItem('register.avatar', selectedAvatar);
     alert(`Avatar selected: ${selectedAvatar}`);
+    router.push('./leaderboard');
   };
 
   const handleSkip = () => {

@@ -1,7 +1,7 @@
 "use client";
 
-import Footer from '@/app/footer/page';
-import Header from '@/app/header/page';
+import Footer from '@/app/footer/page'; // Updated import path
+import Header from '@/app/header/page'; // Updated import path
 import { Button } from '@/components/ui/button';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -82,7 +82,7 @@ const PhoneVerificationPage = () => {
     if (phoneNumber && agreed) {
       console.log('Sending code to:', selectedCountry.code + phoneNumber);
     }
-    router.push('register/verify');
+    router.push('/register/verify'); // Fixed route path
   };
 
   const handleCountrySelect = (country: typeof countries[0]) => {
@@ -108,20 +108,26 @@ const PhoneVerificationPage = () => {
   }, [showDropdown]);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header/>
-      <div className="flex-1 flex  justify-center px-4 py-8">
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      {/* Header Component */}
+      <Header />
+      
+      {/* Main Content */}
+      <main className="flex-1 flex items-center justify-center px-4 py-8 sm:py-12">
         <div className="max-w-md w-full space-y-6">
+          {/* Title Section */}
           <div className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3">
               Verify Your Phone
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 text-sm sm:text-base">
               We'll send you a code to verify your phone number.
             </p>
           </div>
 
-          <div className="space-y-5">
+          {/* Form Section */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 space-y-5">
+            {/* Phone Number Input */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Phone Number
@@ -134,7 +140,7 @@ const PhoneVerificationPage = () => {
                       e.stopPropagation();
                       setShowDropdown(!showDropdown);
                     }}
-                    className="flex items-center px-3 py-3 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-l-lg"
+                    className="flex items-center px-3 py-3 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-l-lg transition-colors"
                   >
                     {selectedCountry.flagImage ? (
                       <img 
@@ -176,7 +182,7 @@ const PhoneVerificationPage = () => {
                               e.stopPropagation();
                               handleCountrySelect(country);
                             }}
-                            className="w-full flex items-center px-3 py-2 hover:bg-gray-50 text-left text-sm"
+                            className="w-full flex items-center px-3 py-2 hover:bg-gray-50 text-left text-sm transition-colors"
                           >
                             {country.flagImage ? (
                               <img 
@@ -208,12 +214,13 @@ const PhoneVerificationPage = () => {
                   onFocus={() => setShowDropdown(false)}
                   onClick={() => setShowDropdown(false)}
                   placeholder="(202) 555-0198"
-                  className="w-full pl-28 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none text-gray-900"
+                  className="w-full pl-20 sm:pl-28 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none text-gray-900 transition-all"
                 />
               </div>
             </div>
 
-            <div className="flex items-start justify-center space-x-2">
+            {/* Terms Checkbox */}
+            <div className="flex items-start space-x-3">
               <input
                 type="checkbox"
                 id="terms"
@@ -221,7 +228,7 @@ const PhoneVerificationPage = () => {
                 onChange={(e) => setAgreed(e.target.checked)}
                 className="mt-0.5 w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500"
               />
-              <label htmlFor="terms" className="text-sm text-gray-600">
+              <label htmlFor="terms" className="text-sm text-gray-600 leading-relaxed">
                 I agree to the{' '}
                 <a href="#" className="text-purple-600 hover:text-purple-700 underline">
                   Terms of Use
@@ -230,19 +237,22 @@ const PhoneVerificationPage = () => {
               </label>
             </div>
 
-            <div className='flex justify-center'>
-            <Button
-              onClick={handleSendCode}
-              disabled={!phoneNumber || !agreed}
-              
-            >
-              Send Code
-            </Button>
+            {/* Send Code Button */}
+            <div className="flex justify-center pt-4">
+              <Button
+                onClick={handleSendCode}
+                disabled={!phoneNumber || !agreed}
+                className="w-full sm:w-auto min-w-32 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-3 px-8 rounded-lg transition-all duration-200"
+              >
+                Send Code
+              </Button>
             </div>
           </div>
         </div>
-      </div>
-      <Footer/>
+      </main>
+      
+      {/* Footer Component */}
+      <Footer />
     </div>
   );
 };

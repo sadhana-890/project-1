@@ -6,10 +6,12 @@ import { usePathname } from "next/navigation";
 export default function Header() {
   const pathname = usePathname();
 
-  const linkClasses = (href: string) =>
-    `hover:text-black-600 ${
-      pathname === href ? "text-black-600 font-bold" : ""
-    }`;
+  const linkClasses = (active: boolean) =>
+    `hover:text-black-600 ${active ? "text-black-600 font-bold" : ""}`;
+
+  const isHomeActive = pathname === "/" || pathname.startsWith("/register");
+  const isDocsActive = pathname === "/docs";
+  const isDeveloperActive = pathname === "/login";
 
   return (
     <header className="px-6 sm:px-10 py-4">
@@ -22,13 +24,13 @@ export default function Header() {
 
         {/* Nav (centered) */}
         <nav className="absolute left-1/2 transform -translate-x-1/2 flex gap-6 font-medium text-base">
-          <Link href="/" className={linkClasses("/")}>
+          <Link href="/" className={linkClasses(isHomeActive)}>
             Home
           </Link>
-          <Link href="/docs" className={linkClasses("/docs")}>
+          <Link href="/docs" className={linkClasses(isDocsActive)}>
             Docs
           </Link>
-          <Link href="/login" className={linkClasses("/login")}>
+          <Link href="/login" className={linkClasses(isDeveloperActive)}>
             Developer
           </Link>
         </nav>
@@ -43,13 +45,13 @@ export default function Header() {
 
         {/* Nav (bottom row) */}
         <nav className="flex justify-center gap-4 font-medium text-sm">
-          <Link href="/" className={linkClasses("/")}>
+          <Link href="/" className={linkClasses(isHomeActive)}>
             Home
           </Link>
-          <Link href="/docs" className={linkClasses("/docs")}>
+          <Link href="/docs" className={linkClasses(isDocsActive)}>
             Docs
           </Link>
-          <Link href="/login" className={linkClasses("/login")}>
+          <Link href="/login" className={linkClasses(isDeveloperActive)}>
             Developer
           </Link>
         </nav>

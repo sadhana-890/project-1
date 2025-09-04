@@ -6,6 +6,7 @@ import { metrics, apps, devLogs } from "@/lib/mockUsers";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useRouter } from "next/navigation";
 // ---- Mock Data ------------------------------------
 
 // ---- UI helpers -----------------------------------
@@ -35,6 +36,7 @@ const LogIcon: React.FC<{ type: "success" | "error" | "warning" }>=({ type })=>{
 // ---- Page -----------------------------------------
 export default function Component() {
    const { user } = useAuth();
+    const router = useRouter();
 
    // Debug: Log user data to see what's available
    console.log("Dashboard - User data:", user);
@@ -94,7 +96,7 @@ export default function Component() {
             <section>
               <div className="mb-3 flex items-center gap-3">
                 <h2 className="text-lg font-semibold">Your Apps</h2>
-                <Button className="inline-flex items-center gap-2 border-2  bg-[#8759FF] px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700">
+                <Button onClick={() => router.push("/dashboard/createNewApp")} className="inline-flex items-center gap-2 border-2  bg-[#8759FF] px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700">
                   <Plus className="size-4" /> Create a New App
                 </Button>
               </div>

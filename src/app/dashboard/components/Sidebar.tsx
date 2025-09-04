@@ -44,27 +44,27 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
   const SidebarContent = () => (
     <>
       {/* Logo */}
-      <div className="flex items-center space-x-2 mb-6 lg:mb-10 p-2 lg:p-0">
+      <div className="flex items-center space-x-2 mb-4 lg:mb-6 p-1 lg:p-0">
         <Image
           src="/images/logo.svg"
           alt="Superapp Logo"
-          width={150}
-          height={40}
-          className="w-[120px] lg:w-[150px] h-[32px] lg:h-[40px]"
+          width={120}
+          height={32}
+          className="w-[100px] lg:w-[120px] h-[26px] lg:h-[32px]"
         />
       </div>
 
       {/* Main Modules */}
-      <div className="mb-6">
+      <div className="mb-4">
         <p className="text-xs font-light text-gray-400 mb-2 font-sans">MAIN MODULES</p>
-        <ul className="space-y-2">
+        <ul className="space-y-1">
           {mainModules.map((item) => {
             const isActive = pathname === item.path;
             return (
               <li key={item.name}>
                 <Link
                   href={item.path}
-                  className={`flex items-center px-3 py-2 rounded-lg transition ${
+                  className={`flex items-center px-2 py-1.5 rounded text-sm transition ${
                     isActive
                       ? "bg-purple-500 text-white"
                       : "text-gray-600 hover:bg-gray-100"
@@ -74,9 +74,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
                   <Image
                     src={item.icon}
                     alt={item.name}
-                    width={20}
-                    height={20}
-                    className="mr-3 flex-shrink-0"
+                    width={16}
+                    height={16}
+                    className="mr-2 flex-shrink-0"
                   />
                   <span className="truncate">{item.name}</span>
                 </Link>
@@ -89,14 +89,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
       {/* Pages */}
       <div>
         <p className="text-xs font-light text-gray-400 mb-2 font-sans">PAGES</p>
-        <ul className="space-y-2">
+        <ul className="space-y-1">
           {pages.map((item) => {
             const isActive = pathname === item.path;
             return (
               <li key={item.name}>
                 <Link
                   href={item.path}
-                  className={`flex items-center px-3 py-2 rounded-lg transition ${
+                  className={`flex items-center px-2 py-1.5 rounded text-sm transition ${
                     isActive
                       ? "bg-purple-500 text-white"
                       : "text-gray-600 hover:bg-gray-100"
@@ -106,9 +106,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
                   <Image
                     src={item.icon}
                     alt={item.name}
-                    width={20}
-                    height={20}
-                    className="mr-3 flex-shrink-0"
+                    width={16}
+                    height={16}
+                    className="mr-2 flex-shrink-0"
                   />
                   <span className="truncate">{item.name}</span>
                 </Link>
@@ -131,23 +131,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
       )}
 
       {/* Desktop Sidebar - Always visible on large screens */}
-      <div className="hidden lg:flex h-screen w-64 bg-white border-r p-4 flex-col fixed left-0 top-0 z-30">
+      <div className="hidden lg:flex h-screen w-56 bg-white border-r p-3 flex-col fixed left-0 top-0 z-30">
         <SidebarContent />
       </div>
 
       {/* Mobile Sidebar - Slide-out drawer */}
       <div
-        className={`lg:hidden fixed left-0 top-0 h-screen w-64 bg-white border-r p-4 flex flex-col transform transition-transform duration-300 ease-in-out z-50 ${
+        className={`lg:hidden fixed left-0 top-0 h-screen w-56 bg-white border-r p-3 flex flex-col transform transition-transform duration-300 ease-in-out z-50 ${
           isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         {/* Close button for mobile */}
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-end mb-3">
           <button
             onClick={() => setIsMobileMenuOpen(false)}
-            className="p-1 rounded-lg hover:bg-gray-100"
+            className="p-1 rounded hover:bg-gray-100"
           >
-            <X className="h-5 w-5 text-gray-600" />
+            <X className="h-4 w-4 text-gray-600" />
           </button>
         </div>
         <SidebarContent />
