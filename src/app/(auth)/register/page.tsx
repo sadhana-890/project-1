@@ -117,7 +117,7 @@ const PhoneVerificationPage = () => {
               Verify Your Phone
             </h1>
             <p className="text-gray-600">
-              We'll send you a code to verify your phone number.
+              We&apos;ll send you a code to verify your phone number.
             </p>
           </div>
 
