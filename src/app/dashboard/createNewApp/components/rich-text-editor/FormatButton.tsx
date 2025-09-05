@@ -1,12 +1,10 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
+import React from "react"
 
 interface FormatButtonProps {
-  icon: string;
-  alt: string;
-  onClick: () => void;
-  isActive?: boolean;
-  className?: string;
+  icon: string
+  alt: string
+  onClick: () => void
+  isActive?: boolean
 }
 
 const FormatButton: React.FC<FormatButtonProps> = ({
@@ -14,18 +12,16 @@ const FormatButton: React.FC<FormatButtonProps> = ({
   alt,
   onClick,
   isActive = false,
-  className = ''
-}) => {
-  return (
-    <Button
-      variant="ghost"
-      size="sm"
-      className={`h-7 w-7 p-0 ${isActive ? 'bg-gray-200' : ''} ${className}`}
-      onClick={onClick}
-    >
-      <img src={icon} alt={alt} className="w-3.5 h-3.5" />
-    </Button>
-  );
-};
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    className={`p-2 rounded ${isActive ? "bg-blue-100" : ""}`}
+    aria-label={alt}
+    tabIndex={0}
+  >
+    <img src={icon} alt={alt} width={20} height={20} />
+  </button>
+)
 
-export default FormatButton;
+export default FormatButton

@@ -55,10 +55,9 @@ export default function LoginPage() {
     }
 
     // ✅ Login successful, redirect based on user role
-    // We need to get user info to determine role
     const users = getUsers();
-    const user = users.find(u => u.email === data.email);
-    
+    const user = users.find((u) => u.email === data.email);
+
     if (user) {
       if (user.role === "admin") {
         router.push("/admin");
@@ -74,80 +73,77 @@ export default function LoginPage() {
 
   return (
     <>
-    <Header/>
-    <div className="flex flex-col min-h-screen">
-      
-      <main className="flex flex-col items-center flex-1 px-6 sm:px-20 lg:px-40 mt-10 sm:mt-[60px]">
-        <h1 className="text-3xl sm:text-4xl lg:text-[56px] font-semibold text-center text-[#060535] mb-2 leading-tight">
-          Log in to your Superapp Developer Account
-        </h1>
-        <p className="text-base sm:text-lg lg:text-[18px] text-gray-500 text-center mb-6 px-2 sm:px-0">
-          From wallets to webhooks—get everything you need to build fast, secure,
-          and fun blockchain-powered experiences
-        </p>
+      <Header />
+      <div className="flex flex-col min-h-screen">
+        <main className="flex flex-col items-center flex-1 px-4 sm:px-16 lg:px-32 mt-8 sm:mt-12">
+          <h1 className="text-2xl sm:text-3xl lg:text-5xl font-semibold text-center text-[#060535] mb-1 leading-tight">
+            Log in to your Superapp Developer Account
+          </h1>
+          <p className="text-sm sm:text-base lg:text-base text-gray-500 text-center mb-5 px-2 sm:px-0">
+            From wallets to webhooks—get everything you need to build fast, secure,
+            and fun blockchain-powered experiences
+          </p>
 
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4 w-full max-w-md bg-white"
-        >
-          {/* Email field */}
-          <div className="flex justify-center">
-            <div className="w-full max-w-md">
-              <Label className="block text-sm font-medium mb-1">Email Address</Label>
-              <Input
-                type="email"
-                className="w-full sm:max-w-md md:max-w-lg h-12 px-4 border border-gray-300 rounded-md shadow-none"
-                {...register("email", { required: "Email is required" })}
-              />
-              {errors.email && (
-                <p className="text-red-500 text-sm">{errors.email.message}</p>
-              )}
-            </div>
-          </div>
-
-          {/* Password field with toggle */}
-          <div className="flex justify-center">
-            <div className="w-full max-w-md">
-              <Label className="block text-sm font-medium mb-1">Password</Label>
-              <div className="relative">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="space-y-3 w-full max-w-sm bg-white"
+          >
+            {/* Email field */}
+            <div className="flex justify-center">
+              <div className="w-full max-w-sm">
+                <Label className="block text-xs font-medium mb-1">Email Address</Label>
                 <Input
-                  type={showPassword ? "text" : "password"}
-                  className="w-full sm:max-w-md md:max-w-lg h-12 px-4 pr-12 border border-gray-300 rounded-md shadow-none"
-                  {...register("password", { required: "Password is required" })}
+                  type="email"
+                  className="w-full sm:max-w-sm md:max-w-md h-10 px-3 border border-gray-300 rounded-md shadow-none"
+                  {...register("email", { required: "Email is required" })}
                 />
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none transition-colors"
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-5 w-5" />
-                  ) : (
-                    <Eye className="h-5 w-5" />
-                  )}
-                </button>
+                {errors.email && (
+                  <p className="text-red-500 text-xs">{errors.email.message}</p>
+                )}
               </div>
-              {errors.password && (
-                <p className="text-red-500 text-sm">{errors.password.message}</p>
-              )}
             </div>
-          </div>
 
-          {/* Submit button */}
-          <div className="flex justify-center">
-            <Button
-              type="submit"
-              className="w-full sm:w-[120px] h-12 rounded-sm bg-[#8759FF] text-white hover:bg-purple-700"
-            >
-              Login
-            </Button>
-          </div>
-        </form>
-      </main>
-   
-    </div>
+            {/* Password field with toggle */}
+            <div className="flex justify-center">
+              <div className="w-full max-w-sm">
+                <Label className="block text-xs font-medium mb-1">Password</Label>
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    className="w-full sm:max-w-sm md:max-w-md h-10 px-3 pr-10 border border-gray-300 rounded-md shadow-none"
+                    {...register("password", { required: "Password is required" })}
+                  />
+                  <button
+                    type="button"
+                    onClick={togglePasswordVisibility}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none transition-colors"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="text-red-500 text-xs">{errors.password.message}</p>
+                )}
+              </div>
+            </div>
 
-    <Footer/>
+            {/* Submit button */}
+            <div className="flex justify-center">
+              <Button
+                type="submit"
+                className="w-full sm:w-[100px] h-10 rounded-sm bg-[#8759FF] text-white hover:bg-purple-700"
+              >
+                Login
+              </Button>
+            </div>
+          </form>
+        </main>
+      </div>
+      <Footer />
     </>
   );
 }

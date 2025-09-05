@@ -126,7 +126,7 @@ const PhoneVerificationPage = () => {
           </div>
 
           {/* Form Section */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 space-y-5">
+          
             {/* Phone Number Input */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -246,7 +246,7 @@ const PhoneVerificationPage = () => {
               >
                 Send Code
               </Button>
-            </div>
+            
           </div>
         </div>
       </main>

@@ -17,14 +17,13 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
 }) => {
   const editorRef = useRef<HTMLDivElement>(null);
   const [textStyle, setTextStyle] = useState('normal');
-  const [textAlign, setTextAlign] = useState('left');
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
   const [isStrikethrough, setIsStrikethrough] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Execute command with proper typing - keeping your original approach
+  // Execute command with proper typing
   const execCommand = (command: string, showDefaultUI = false, value?: string) => {
     try {
       return (document as any).execCommand(command, showDefaultUI, value);
@@ -34,43 +33,66 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
     }
   };
 
-  // Modern styling system (keeping this improvement)
+  // Apply styles to newly created elements
   const applyElementStyles = (element: HTMLElement) => {
     const tagName = element.tagName.toLowerCase();
     
     // Remove any existing styles first
     element.removeAttribute('style');
     
-    const styles: Record<string, Record<string, string>> = {
-      h1: { fontSize: '2rem', fontWeight: '700', lineHeight: '1.2', margin: '0.5rem 0' },
-      h2: { fontSize: '1.75rem', fontWeight: '600', lineHeight: '1.3', margin: '0.5rem 0' },
-      h3: { fontSize: '1.5rem', fontWeight: '600', lineHeight: '1.4', margin: '0.4rem 0' },
-      h4: { fontSize: '1.25rem', fontWeight: '600', lineHeight: '1.4', margin: '0.4rem 0' },
-      h5: { fontSize: '1.125rem', fontWeight: '600', lineHeight: '1.4', margin: '0.3rem 0' },
-      h6: { fontSize: '1rem', fontWeight: '600', lineHeight: '1.4', margin: '0.3rem 0' },
-      blockquote: {
-        borderLeft: '4px solid #e5e7eb',
-        paddingLeft: '1rem',
-        margin: '0.5rem 0',
-        fontStyle: 'italic',
-        color: '#6b7280'
-      },
-      pre: {
-        backgroundColor: '#f3f4f6',
-        borderRadius: '0.375rem',
-        padding: '0.75rem',
-        fontFamily: 'ui-monospace, SFMono-Regular, monospace',
-        fontSize: '0.875rem',
-        margin: '0.5rem 0',
-        overflowX: 'auto'
-      }
-    };
-
-    const elementStyles = styles[tagName];
-    if (elementStyles) {
-      Object.entries(elementStyles).forEach(([property, value]) => {
-        (element.style as any)[property] = value;
-      });
+    switch (tagName) {
+      case 'h1':
+        element.style.fontSize = '2rem';
+        element.style.fontWeight = '700';
+        element.style.lineHeight = '1.2';
+        element.style.margin = '0.5rem 0';
+        break;
+      case 'h2':
+        element.style.fontSize = '1.75rem';
+        element.style.fontWeight = '600';
+        element.style.lineHeight = '1.3';
+        element.style.margin = '0.5rem 0';
+        break;
+      case 'h3':
+        element.style.fontSize = '1.5rem';
+        element.style.fontWeight = '600';
+        element.style.lineHeight = '1.4';
+        element.style.margin = '0.4rem 0';
+        break;
+      case 'h4':
+        element.style.fontSize = '1.25rem';
+        element.style.fontWeight = '600';
+        element.style.lineHeight = '1.4';
+        element.style.margin = '0.4rem 0';
+        break;
+      case 'h5':
+        element.style.fontSize = '1.125rem';
+        element.style.fontWeight = '600';
+        element.style.lineHeight = '1.4';
+        element.style.margin = '0.3rem 0';
+        break;
+      case 'h6':
+        element.style.fontSize = '1rem';
+        element.style.fontWeight = '600';
+        element.style.lineHeight = '1.4';
+        element.style.margin = '0.3rem 0';
+        break;
+      case 'blockquote':
+        element.style.borderLeft = '4px solid #e5e7eb';
+        element.style.paddingLeft = '1rem';
+        element.style.margin = '0.5rem 0';
+        element.style.fontStyle = 'italic';
+        element.style.color = '#6b7280';
+        break;
+      case 'pre':
+        element.style.backgroundColor = '#f3f4f6';
+        element.style.borderRadius = '0.375rem';
+        element.style.padding = '0.75rem';
+        element.style.fontFamily = 'ui-monospace, SFMono-Regular, monospace';
+        element.style.fontSize = '0.875rem';
+        element.style.margin = '0.5rem 0';
+        element.style.overflowX = 'auto';
+        break;
     }
   };
 
@@ -86,79 +108,63 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
   const updateFormattingState = useCallback(() => {
     if (!editorRef.current) return;
     
-    try {
-      const selection = window.getSelection();
-      if (!selection || selection.rangeCount === 0) return;
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0) return;
 
-      const range = selection.getRangeAt(0);
-      const container = range.commonAncestorContainer;
+    const range = selection.getRangeAt(0);
+    const container = range.commonAncestorContainer;
+    
+    const element = container.nodeType === Node.TEXT_NODE ? container.parentElement : container as HTMLElement;
+    
+    if (element) {
+      setIsBold(element.tagName === 'B' || element.style.fontWeight === 'bold');
+      setIsItalic(element.tagName === 'I' || element.style.fontStyle === 'italic');
+      setIsUnderline(element.tagName === 'U' || element.style.textDecoration.includes('underline'));
+      setIsStrikethrough(element.tagName === 'S' || element.style.textDecoration.includes('line-through'));
       
-      const element = container.nodeType === Node.TEXT_NODE ? container.parentElement : container as HTMLElement;
-      
-      if (element && editorRef.current.contains(element)) {
-        // Check formatting states
-        setIsBold(
-          !!element.closest('b, strong') || 
-          window.getComputedStyle(element).fontWeight === 'bold' ||
-          window.getComputedStyle(element).fontWeight === '700'
-        );
-        setIsItalic(
-          !!element.closest('i, em') || 
-          window.getComputedStyle(element).fontStyle === 'italic'
-        );
-        setIsUnderline(
-          !!element.closest('u') || 
-          window.getComputedStyle(element).textDecoration.includes('underline')
-        );
-        setIsStrikethrough(
-          !!element.closest('s, strike') || 
-          window.getComputedStyle(element).textDecoration.includes('line-through')
-        );
-        
-        // Check text style
-        const blockElement = element.closest('h1, h2, h3, h4, h5, h6, blockquote, pre, p');
-        if (blockElement) {
-          const tagName = blockElement.tagName.toLowerCase();
-          if (tagName.startsWith('h')) {
-            setTextStyle(tagName);
-          } else if (tagName === 'blockquote') {
-            setTextStyle('blockquote');
-          } else if (tagName === 'pre') {
-            setTextStyle('code');
-          } else {
-            setTextStyle('normal');
-          }
-        } else {
-          setTextStyle('normal');
-        }
+      const tagName = element.tagName.toLowerCase();
+      if (tagName.startsWith('h')) {
+        setTextStyle(tagName);
+      } else if (tagName === 'blockquote') {
+        setTextStyle('blockquote');
+      } else if (tagName === 'code') {
+        setTextStyle('code');
+      } else {
+        setTextStyle('normal');
       }
-    } catch (error) {
-      console.warn('Error updating formatting state:', error);
     }
   }, []);
 
-  // Handle formatting commands - back to your original approach
+  // Handle formatting commands
   const handleFormat = useCallback((command: string, value?: string) => {
     if (!editorRef.current) return;
 
-    // Always focus first
     editorRef.current.focus();
 
     switch (command) {
       case 'bold':
         execCommand('bold', false);
+        setIsBold(!isBold);
         break;
       case 'italic':
         execCommand('italic', false);
+        setIsItalic(!isItalic);
         break;
       case 'underline':
         execCommand('underline', false);
+        setIsUnderline(!isUnderline);
         break;
       case 'strikethrough':
         execCommand('strikethrough', false);
+        setIsStrikethrough(!isStrikethrough);
         break;
       case 'removeFormat':
         execCommand('removeFormat', false);
+        setIsBold(false);
+        setIsItalic(false);
+        setIsUnderline(false);
+        setIsStrikethrough(false);
+        setTextStyle('normal');
         break;
       case 'insertUnorderedList':
         execCommand('insertUnorderedList', false);
@@ -180,57 +186,29 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         break;
       case 'insertCode':
         execCommand('formatBlock', false, '<pre>');
+        setTimeout(applyAllStyles, 10);
         break;
       case 'insertBlockquote':
         execCommand('formatBlock', false, '<blockquote>');
+        setTimeout(applyAllStyles, 10);
         break;
       case 'insertHorizontalRule':
         execCommand('insertHorizontalRule', false);
         break;
+      default:
+        break;
     }
 
-    // Apply styles and update after a short delay
+    // Apply styles and update value
     setTimeout(() => {
       applyAllStyles();
       if (editorRef.current) {
         onChange(editorRef.current.innerHTML);
       }
-      updateFormattingState();
     }, 10);
-  }, [onChange, updateFormattingState]);
+  }, [isBold, isItalic, isUnderline, isStrikethrough, onChange]);
 
-  // Handle text alignment changes
-  const handleTextAlignChange = useCallback((align: string) => {
-    if (!editorRef.current) return;
-
-    editorRef.current.focus();
-    setTextAlign(align);
-
-    switch (align) {
-      case 'left':
-        execCommand('justifyLeft', false);
-        break;
-      case 'center':
-        execCommand('justifyCenter', false);
-        break;
-      case 'right':
-        execCommand('justifyRight', false);
-        break;
-      case 'justify':
-        execCommand('justifyFull', false);
-        break;
-    }
-
-    setTimeout(() => {
-      applyAllStyles();
-      if (editorRef.current) {
-        onChange(editorRef.current.innerHTML);
-      }
-      updateFormattingState();
-    }, 10);
-  }, [onChange, updateFormattingState]);
-
-  // Handle text style changes - back to your original approach
+  // Handle text style changes
   const handleTextStyleChange = useCallback((style: string) => {
     if (!editorRef.current) return;
 
@@ -255,19 +233,20 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       case 'code':
         execCommand('formatBlock', false, '<pre>');
         break;
+      default:
+        break;
     }
 
-    // Apply styles after a short delay
+    // Apply styles after a short delay to ensure the DOM is updated
     setTimeout(() => {
       applyAllStyles();
       if (editorRef.current) {
         onChange(editorRef.current.innerHTML);
       }
-      updateFormattingState();
     }, 10);
-  }, [onChange, updateFormattingState]);
+  }, [onChange]);
 
-  // Handle undo/redo - back to your original approach
+  // Handle undo/redo
   const handleUndo = useCallback(() => {
     if (!editorRef.current) return;
     editorRef.current.focus();
@@ -277,9 +256,8 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       if (editorRef.current) {
         onChange(editorRef.current.innerHTML);
       }
-      updateFormattingState();
     }, 10);
-  }, [onChange, updateFormattingState]);
+  }, [onChange]);
 
   const handleRedo = useCallback(() => {
     if (!editorRef.current) return;
@@ -290,9 +268,8 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       if (editorRef.current) {
         onChange(editorRef.current.innerHTML);
       }
-      updateFormattingState();
     }, 10);
-  }, [onChange, updateFormattingState]);
+  }, [onChange]);
 
   // Handle content changes
   const handleContentChange = useCallback(() => {
@@ -309,27 +286,24 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
       setIsInitialized(true);
       
       // Apply styles to existing content
-      setTimeout(() => {
-        applyAllStyles();
-        // Place cursor at the end of the content
-        if (editorRef.current) {
-          const range = document.createRange();
-          const selection = window.getSelection();
-          
-          if (editorRef.current.lastChild) {
-            range.setStartAfter(editorRef.current.lastChild);
-            range.collapse(true);
-          } else {
-            range.selectNodeContents(editorRef.current);
-            range.collapse(false);
-          }
-          
-          if (selection) {
-            selection.removeAllRanges();
-            selection.addRange(range);
-          }
-        }
-      }, 10);
+      setTimeout(applyAllStyles, 10);
+      
+      // Place cursor at the end of the content
+      const range = document.createRange();
+      const selection = window.getSelection();
+      
+      if (editorRef.current.lastChild) {
+        range.setStartAfter(editorRef.current.lastChild);
+        range.collapse(true);
+      } else {
+        range.selectNodeContents(editorRef.current);
+        range.collapse(false);
+      }
+      
+      if (selection) {
+        selection.removeAllRanges();
+        selection.addRange(range);
+      }
     }
   }, [value, isInitialized]);
 
@@ -352,43 +326,7 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         selection.addRange(range);
       }
     }
-    updateFormattingState();
-  }, [isInitialized, updateFormattingState]);
-
-  // Add keyboard shortcuts
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-    const modKey = isMac ? e.metaKey : e.ctrlKey;
-
-    if (modKey) {
-      switch (e.key) {
-        case 'b':
-          e.preventDefault();
-          handleFormat('bold');
-          break;
-        case 'i':
-          e.preventDefault();
-          handleFormat('italic');
-          break;
-        case 'u':
-          e.preventDefault();
-          handleFormat('underline');
-          break;
-        case 'z':
-          e.preventDefault();
-          if (e.shiftKey) {
-            handleRedo();
-          } else {
-            handleUndo();
-          }
-          break;
-        case 'y':
-          e.preventDefault();
-          handleRedo();
-          break;
-      }
-    }
-  }, [handleFormat, handleUndo, handleRedo]);
+  }, [isInitialized]);
 
   return (
     <Card className={`border border-gray-200 rounded-md h-40 sm:h-48 ${className}`}>
@@ -398,8 +336,6 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
         onRedo={handleRedo}
         textStyle={textStyle}
         onTextStyleChange={handleTextStyleChange}
-        textAlign={textAlign}
-        onTextAlignChange={handleTextAlignChange}
         isBold={isBold}
         isItalic={isItalic}
         isUnderline={isUnderline}
@@ -418,10 +354,8 @@ const RichTextEditor: React.FC<RichTextEditorProps> = ({
           onBlur={updateFormattingState}
           onKeyUp={updateFormattingState}
           onMouseUp={updateFormattingState}
-          onKeyDown={handleKeyDown}
           suppressContentEditableWarning
         />
-
       </CardContent>
     </Card>
   );

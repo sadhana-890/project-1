@@ -8,8 +8,9 @@ import { useRouter } from 'next/navigation';
 const OTPVerification: React.FC = () => {
   const [otp, setOtp] = useState<string[]>(['', '', '', '', '', '']);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-   const router = useRouter(); 
-
+  
+  const router = useRouter();
+  
   const handleInputChange = (index: number, value: string): void => {
     if (value.length <= 1) {
       const newOtp = [...otp];
@@ -32,24 +33,21 @@ const OTPVerification: React.FC = () => {
     const otpCode = otp.join('');
     console.log('OTP Code:', otpCode);
     // Add your verification logic here
-    router.push('./profile')
-    
+    router.push('./profile');
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       <Header/>
-      <div className="flex-1 flex  justify-center px-4 py-8">
+      <div className="flex-1 flex justify-center px-4 py-8">
         <div className="w-full max-w-md text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
             Enter OTP Code
           </h1>
 
-          <div className="mb-8 text-gray-600 text-sm">
-            <p>
-              Check <span className="text-purple-600 font-medium">+1 (202) 555-0198</span> for your code
-            </p>
-          </div>
+          <p className="mb-8 text-gray-600 text-sm">
+            Check <span className="text-purple-600 font-medium">+1 (202) 555-0198</span> for your code
+          </p>
 
           <div className="flex justify-center space-x-2 mb-6">
             {otp.map((digit, index) => (
@@ -66,17 +64,17 @@ const OTPVerification: React.FC = () => {
             ))}
           </div>
 
-        <Button
-          onClick={handleVerify}
-          disabled={otp.some((digit) => digit === '')}
-          className={`rounded-sm font-semibold transition-colors ${
-            otp.some((digit) => digit === '')
-              ? 'bg-gray-400 text-white cursor-not-allowed'
-              : 'bg-purple-600 text-white hover:bg-purple-700'
-          }`}
-        >
-          Verify
-        </Button>
+          <Button
+            onClick={handleVerify}
+            disabled={otp.some((digit) => digit === '')}
+            className={`rounded-sm font-semibold transition-colors ${
+              otp.some((digit) => digit === '')
+                ? 'bg-gray-400 text-white cursor-not-allowed'
+                : 'bg-purple-600 text-white hover:bg-purple-700'
+            }`}
+          >
+            Verify
+          </Button>
         </div>
       </div>
       <Footer/>

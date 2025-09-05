@@ -12,6 +12,7 @@ import {
 
 interface RichTextToolbarProps {
   onFormat: (command: string, value?: string) => void
+  onListToggle: (listType: 'ul' | 'ol') => void  // New prop for list handling
   onUndo: () => void
   onRedo: () => void
   textStyle: string
@@ -22,7 +23,6 @@ interface RichTextToolbarProps {
   isItalic: boolean
   isUnderline: boolean
   isStrikethrough: boolean
-  // Add list state props
   isUnorderedList?: boolean
   isOrderedList?: boolean
   textColor?: string
@@ -32,6 +32,7 @@ interface RichTextToolbarProps {
 
 const RichTextToolbar: React.FC<RichTextToolbarProps> = ({
   onFormat,
+  onListToggle,  // Use new prop instead of onFormat for lists
   onUndo,
   onRedo,
   textStyle,
@@ -102,19 +103,6 @@ const RichTextToolbar: React.FC<RichTextToolbarProps> = ({
     } catch {}
     document.execCommand("foreColor", false, color)
     onTextColorChange?.(color)
-  }
-
-  // Improved list toggle function
-  const toggleList = (listType: "ul" | "ol") => {
-    restoreSelectionAndFocus()
-    
-    const command = listType === "ul" ? "insertUnorderedList" : "insertOrderedList"
-    
-    // Use the onFormat callback to ensure consistency
-    onFormat(command)
-    
-    // Save selection after the operation
-    setTimeout(() => saveSelection(), 0)
   }
 
   return (
@@ -272,17 +260,17 @@ const RichTextToolbar: React.FC<RichTextToolbarProps> = ({
           }}
         />
 
-        {/* List Buttons with Active State */}
+        {/* List Buttons with Updated Handler */}
         <FormatButton
           icon="/icons/unorderedList.svg"
           alt="unordered list"
-          onClick={() => toggleList("ul")}
+          onClick={() => onListToggle('ul')}  // Use new handler
           isActive={isUnorderedList}
         />
         <FormatButton
           icon="/icons/orderedList.svg"
           alt="ordered list"
-          onClick={() => toggleList("ol")}
+          onClick={() => onListToggle('ol')}  // Use new handler
           isActive={isOrderedList}
         />
       </div>
