@@ -16,12 +16,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
 
   const mainModules = [
     { name: "Dashboard", icon: "/icons/dashboard.svg", path: "/dashboard" },
-    { name: "API Keys", icon: "/icons/api-keys.svg", path: "/apikeys" },
+    { name: "API Keys", icon: "/icons/api-keys.svg", path: "/dashboard/api-keys" }, // Fixed path
   ];
 
   const pages = [
     { name: "Settings", icon: "/icons/settings.svg", path: "/dashboard/settings" },
-    { name: "Logout", icon: "/icons/logout.svg", path: "/logout" },
+    { name: "Logout", icon: "/icons/logout.svg", path: "/logout" }, // Updated to match app/logout location
   ];
 
   // Close mobile menu when route changes
@@ -46,10 +46,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
     if (itemPath === "/dashboard") {
       // Dashboard is active if:
       // 1. Current path is exactly /dashboard
-      // 2. Current path starts with /dashboard/ (dashboard sub-pages)
-      // 3. Current path is the create new app form (adjust path as needed)
+      // 2. Current path starts with /dashboard/ but exclude settings, logout, and api-keys
       return pathname === "/dashboard" || 
-             pathname.startsWith("/dashboard/") ||
+             (pathname.startsWith("/dashboard/") && 
+              !pathname.startsWith("/dashboard/settings") &&
+              !pathname.startsWith("/dashboard/logout") &&
+              !pathname.startsWith("/dashboard/api-keys")) ||
              pathname === "/create-new-app" || // Adjust this path to match your actual route
              pathname === "/apps/create" ||    // Alternative path - adjust as needed
              pathname.includes("create-app");  // Fallback for any create app related paths

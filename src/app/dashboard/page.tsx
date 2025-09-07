@@ -29,7 +29,7 @@ const LogIcon: React.FC<{ type: "success" | "error" | "warning" }> = ({ type }) 
 };
 
 // ---- Page -----------------------------------------
-export default function Component() {
+export default function dashboard() {
   const { user } = useAuth();
   const router = useRouter();
 
