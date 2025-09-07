@@ -2,9 +2,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
-import { Menu, Search, Bell } from "lucide-react";
+import { Menu, Search, Bell, ChevronDown } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-
 
 interface User {
   name: string;
@@ -17,7 +16,6 @@ interface HeaderProps {
 }
 
 export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: HeaderProps) {
-  // For now, let's use a placeholder user until you provide AuthContext details
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<number>(0);
   const [search, setSearch] = useState("");
@@ -89,7 +87,7 @@ export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: Header
       </div>
 
       {/* Right Section - Notifications + Profile */}
-      <div className="flex items-center gap-1 sm:gap-2 md:gap-3 lg:gap-4 flex-shrink-0">
+      <div className="flex items-center gap-2 sm:gap-3 md:gap-4 flex-shrink-0">
         {/* Notification Bell */}
         <button
           className="relative p-1.5 rounded-md hover:bg-gray-50 transition-colors border-0 bg-transparent"
@@ -103,32 +101,28 @@ export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: Header
           )}
         </button>
 
-        {/* User Profile */}
+        {/* User Profile - Clean minimal design */}
         {user && (
-          <div className="flex items-center space-x-1.5 sm:space-x-2 px-1.5 sm:px-2 py-1 border rounded-full cursor-pointer hover:bg-gray-50 transition-colors">
+          <div className="flex items-center gap-2 pl-2 pr-4 h-8 md:h-9 border border-gray-200 rounded-full cursor-pointer hover:bg-gray-50 transition-colors bg-white">
             {/* Avatar */}
-            <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center flex-shrink-0">
-              <span className="text-white text-xs font-medium">
+            <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
+              <span className="text-gray-600 text-xs font-medium">
                 {user.name.charAt(0)}
               </span>
             </div>
             
-            {/* User Info - Hidden on small mobile, shown on larger screens */}
-            <div className="hidden md:flex flex-col leading-tight min-w-0">
-              <span className="text-xs font-medium text-gray-900 truncate">
+            {/* User Info */}
+            <div className="hidden sm:flex flex-col leading-none min-w-0">
+              <span className="text-sm font-medium text-gray-900 truncate">
                 {user.name}
               </span>
               <span className="text-xs text-gray-500 truncate">
-                {user.role}
+                Developer
               </span>
             </div>
 
-            {/* Show only name on medium mobile screens */}
-            <div className="hidden sm:flex md:hidden flex-col leading-tight min-w-0">
-              <span className="text-xs font-medium text-gray-900 truncate">
-                {user.name}
-              </span>
-            </div>
+            {/* Dropdown Arrow */}
+            <ChevronDown className="h-3 w-3 text-gray-400 flex-shrink-0" />
           </div>
         )}
       </div>

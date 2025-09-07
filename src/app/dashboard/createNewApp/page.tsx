@@ -163,7 +163,7 @@ const CreateNewAppForm: React.FC = () => {
                 <Label className="text-sm font-medium text-gray-700">
                   Webhook URL
                 </Label>
-                <span className="text-red-500">*</span>
+                <span className="text-500">*</span>
                 <img src="/icons/helpCircle.svg" alt="help" className="w-4 h-4" />
               </div>
               <div className="relative">
@@ -194,9 +194,12 @@ const CreateNewAppForm: React.FC = () => {
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
           {/* Left Column - App Description */}
           <div className="w-full lg:w-2/3 space-y-2">
-            <Label className="text-sm font-medium text-gray-700">
-              App Description <span className="text-red-500">*</span>
-            </Label>
+              <Label className="text-sm font-medium text-gray-700 flex items-center gap-1">
+                App Description 
+                <span className="text-grey-500">*</span>
+                <img src="/icons/helpCircle.svg" alt="help" className="w-4 h-4" />
+              </Label>
+
 
             {/* Markdown Editor */}
             <MarkdownEditor
