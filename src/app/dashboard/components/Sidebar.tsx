@@ -41,6 +41,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
     return () => window.removeEventListener('resize', handleResize);
   }, [setIsMobileMenuOpen]);
 
+  // Helper function to check if dashboard should be active
+  const isDashboardActive = (itemPath: string) => {
+    if (itemPath === "/dashboard") {
+      // Dashboard is active if:
+      // 1. Current path is exactly /dashboard
+      // 2. Current path starts with /dashboard/ (dashboard sub-pages)
+      // 3. Current path is the create new app form (adjust path as needed)
+      return pathname === "/dashboard" || 
+             pathname.startsWith("/dashboard/") ||
+             pathname === "/create-new-app" || // Adjust this path to match your actual route
+             pathname === "/apps/create" ||    // Alternative path - adjust as needed
+             pathname.includes("create-app");  // Fallback for any create app related paths
+    }
+    return false;
+  };
+
   const SidebarContent = () => (
     <>
       {/* Logo */}
@@ -59,7 +75,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
         <p className="text-xs font-light text-gray-400 mb-2 font-sans">MAIN MODULES</p>
         <ul className="space-y-1">
           {mainModules.map((item) => {
-            const isActive = pathname === item.path;
+            // Use custom logic for dashboard, regular logic for others
+            const isActive = item.name === "Dashboard" 
+              ? isDashboardActive(item.path)
+              : pathname === item.path;
+              
             return (
               <li key={item.name}>
                 <Link
@@ -71,13 +91,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <Image
-                    src={item.icon}
-                    alt={item.name}
-                    width={16}
-                    height={16}
-                    className="mr-2 flex-shrink-0"
-                  />
+                  <div className={`mr-2 flex-shrink-0 w-4 h-4 ${
+                    isActive ? 'brightness-0 invert bg-transparent' : ''
+                  }`}>
+                    <Image
+                      src={item.icon}
+                      alt={item.name}
+                      width={16}
+                      height={16}
+                      className={`w-4 h-4 ${isActive ? 'mix-blend-multiply' : ''}`}
+                    />
+                  </div>
                   <span className="truncate">{item.name}</span>
                 </Link>
               </li>
@@ -103,13 +127,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <Image
-                    src={item.icon}
-                    alt={item.name}
-                    width={16}
-                    height={16}
-                    className="mr-2 flex-shrink-0"
-                  />
+                  <div className={`mr-2 flex-shrink-0 w-4 h-4 ${
+                    isActive ? 'brightness-0 invert' : ''
+                  }`}>
+                    <Image
+                      src={item.icon}
+                      alt={item.name}
+                      width={16}
+                      height={16}
+                      className="w-4 h-4"
+                    />
+                  </div>
                   <span className="truncate">{item.name}</span>
                 </Link>
               </li>

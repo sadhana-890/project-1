@@ -25,7 +25,7 @@ const ProfileCreationPage: React.FC = () => {
       <div className="flex-1 flex justify-center px-4 py-8">
         <div className="max-w-md w-full space-y-6">
           <div className="text-center">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+            <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-3 font-inter">
               Create your Superapp profile
             </h1>
             <p className="text-gray-600 text-sm">

@@ -6,7 +6,6 @@ import Footer from '@/app/footer/page';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
-import { ConfirmationDialog, useConfirmationDialog } from '@/utils/confirmation-dialog';
 
 const ProfilePictureSelector = () => {
   const avatars = [
@@ -19,7 +18,6 @@ const ProfilePictureSelector = () => {
   ];
 
   const router = useRouter();
-  const { isOpen, openDialog, closeDialog } = useConfirmationDialog();
   const [currentAvatarIndex, setCurrentAvatarIndex] = useState(0);
 
   const handlePrevious = () => {
@@ -35,26 +33,14 @@ const ProfilePictureSelector = () => {
   };
 
   const handleSelect = () => {
-    openDialog();
-  };
-
-  const handleConfirm = () => {
     const selectedAvatar = avatars[currentAvatarIndex];
     console.log('Selected avatar:', selectedAvatar);
     sessionStorage.setItem('register.avatar', selectedAvatar);
-    closeDialog();
     router.push('./leaderboard');
-  };
-
-  const handleCancel = () => {
-    console.log('Avatar selection cancelled');
-    closeDialog();
-    // Stay on current page - user can continue browsing avatars
   };
 
   const handleSkip = () => {
     console.log('Avatar selection skipped - going to leaderboard');
-    closeDialog();
     router.push('./leaderboard');
   };
 
@@ -63,7 +49,7 @@ const ProfilePictureSelector = () => {
     <Header/>
     <div className="min-h-screen flex justify-center px-4 py-8">
       <div className="w-full max-w-sm text-center">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+        <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-3 font-inter">
           Select Profile Picture
         </h1>
         <p className="text-gray-600 mb-8 text-sm">
@@ -108,10 +94,7 @@ const ProfilePictureSelector = () => {
           </Button>
                      
           <button
-            onClick={() => {
-              console.log('Avatar selection skipped');
-              router.push('./leaderboard');
-            }}
+            onClick={handleSkip}
             className="block mx-auto text-gray-600 hover:text-gray-800 font-medium transition-colors text-sm"
           >
             Skip
@@ -119,22 +102,6 @@ const ProfilePictureSelector = () => {
         </div>
       </div>
     </div>
-    
-    {/* Reusable Confirmation Dialog */}
-    <ConfirmationDialog
-      isOpen={isOpen}
-      title="Confirm Avatar Selection"
-      message="Are you sure you want to choose this avatar as your profile picture?"
-      onConfirm={handleConfirm}
-      onCancel={handleCancel}
-      onSkip={handleSkip}
-      confirmText="Yes, Select Avatar"
-      cancelText="Browse More"
-      skipText="Skip for Now"
-      showSkip={true}
-      variant="default"
-      size="md"
-    />
     
     <Footer/>
  </div>

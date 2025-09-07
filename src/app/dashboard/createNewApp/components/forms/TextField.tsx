@@ -27,8 +27,9 @@ const TextField: React.FC<TextFieldProps> = ({
     </div>
     <Input 
       placeholder={placeholder}
-      className="w-full"
+      className="w-full shadow-none"
       {...props}
+      
     />
   </div>
 );

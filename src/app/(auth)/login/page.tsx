@@ -76,9 +76,9 @@ export default function LoginPage() {
       <Header />
       <div className="flex flex-col min-h-screen">
         <main className="flex flex-col items-center flex-1 px-4 sm:px-16 lg:px-32 mt-8 sm:mt-12">
-          <h1 className="text-2xl sm:text-3xl lg:text-5xl font-semibold text-center text-[#060535] mb-1 leading-tight">
-            Log in to your Superapp Developer Account
-          </h1>
+        <h1 className="text-2xl sm:text-3xl lg:text-5xl font-semibold text-center text-[#060535] mb-1 leading-tight font-inter">
+          Log in to your Superapp Developer Account
+        </h1>
           <p className="text-sm sm:text-base lg:text-base text-gray-500 text-center mb-5 px-2 sm:px-0">
             From wallets to webhooks—get everything you need to build fast, secure,
             and fun blockchain-powered experiences

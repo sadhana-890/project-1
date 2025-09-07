@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Menu, Search, Bell } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+
 
 interface User {
   name: string;
@@ -15,27 +17,27 @@ interface HeaderProps {
 }
 
 export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: HeaderProps) {
-  const [user, setUser] = useState<User | null>(null);
+  // For now, let's use a placeholder user until you provide AuthContext details
+  const { user } = useAuth();
   const [notifications, setNotifications] = useState<number>(0);
   const [search, setSearch] = useState("");
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
   useEffect(() => {
-    // Simulate fetching user and notifications (replace with API call)
+    // Simulate fetching notifications (replace with API call)
     setTimeout(() => {
-      setUser({ name: "Mike", role: "Developer" });
       setNotifications(3); // example notifications
     }, 500);
   }, []);
 
   return (
-    <header className="flex justify-between items-center px-2 sm:px-3 lg:px-4 py-2 bg-white sticky top-0 z-20">
+    <header className="flex justify-between items-center px-3 sm:px-4 lg:px-5 py-2 bg-white sticky top-0 z-20">
       {/* Left Section - Mobile Menu + Search */}
       <div className="flex items-center gap-1 sm:gap-2 flex-1 min-w-0">
         {/* Mobile Hamburger Button */}
         <button
           onClick={() => setIsMobileMenuOpen(true)}
-          className="lg:hidden p-1.5 rounded-md hover:bg-gray-100 transition-colors flex-shrink-0"
+          className="lg:hidden p-1.5 rounded-md hover:bg-gray-50 transition-colors flex-shrink-0 border-0 bg-transparent"
           aria-label="Open menu"
         >
           <Menu className="h-4 w-4 text-gray-600" />
@@ -58,7 +60,7 @@ export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: Header
           {!isSearchExpanded ? (
             <button
               onClick={() => setIsSearchExpanded(true)}
-              className="p-1.5 rounded-md hover:bg-gray-100 transition-colors"
+              className="p-1.5 rounded-md hover:bg-gray-50 transition-colors border-0 bg-transparent"
               aria-label="Search"
             >
               <Search className="h-4 w-4 text-gray-600" />
@@ -77,7 +79,7 @@ export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: Header
               </div>
               <button
                 onClick={() => setIsSearchExpanded(false)}
-                className="p-1 text-gray-500 hover:text-gray-700 text-xs"
+                className="p-1 text-gray-500 hover:text-gray-700 text-xs bg-transparent border-0"
               >
                 Cancel
               </button>
@@ -90,7 +92,7 @@ export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: Header
       <div className="flex items-center gap-1 sm:gap-2 md:gap-3 lg:gap-4 flex-shrink-0">
         {/* Notification Bell */}
         <button
-          className="relative p-1.5 rounded-md hover:bg-gray-100 transition-colors"
+          className="relative p-1.5 rounded-md hover:bg-gray-50 transition-colors border-0 bg-transparent"
           aria-label="Notifications"
         >
           <Bell className="h-4 w-4 text-gray-600" />

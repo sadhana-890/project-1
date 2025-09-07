@@ -41,7 +41,7 @@ const OTPVerification: React.FC = () => {
       <Header/>
       <div className="flex-1 flex justify-center px-4 py-8">
         <div className="w-full max-w-md text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+          <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-6 font-inter">
             Enter OTP Code
           </h1>
 

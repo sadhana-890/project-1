@@ -33,11 +33,7 @@ export default function Component() {
   const { user } = useAuth();
   const router = useRouter();
 
-  // Debug: Log user data to see what's available
-  console.log("Dashboard - User data:", user);
-  console.log("Dashboard - User name:", user?.name);
-  console.log("Dashboard - User email:", user?.email);
-  console.log("Dashboard - User role:", user?.role);
+
 
   const appsMetrics = metrics.find(m => m.id === "apps");
   const consumptionMetrics = metrics.find(m => m.id === "consumption");

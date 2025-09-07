@@ -113,11 +113,11 @@ const PhoneVerificationPage = () => {
       <Header />
       
       {/* Main Content */}
-      <main className="flex-1 flex items-center justify-center px-4 py-8 sm:py-12">
+      <main className="flex-1 flex  justify-center px-4 py-8 sm:py-12">
         <div className="max-w-md w-full space-y-6">
           {/* Title Section */}
           <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 mb-3 font-inter">
               Verify Your Phone
             </h1>
             <p className="text-gray-600 text-sm sm:text-base">

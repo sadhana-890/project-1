@@ -143,20 +143,20 @@ export default function LeaderboardSidebar() {
 
 
       <div className="relative mx-auto max-w-5xl px-4 sm:px-6 md:px-8 z-10">
-        <h1 className="text-xl md:text-3xl font-bold text-center text-[#060535] mt-4 md:mt-6 mb-3 md:mb-4">
+        <h1 className="text-xl md:text-3xl font-semibold text-center text-[#060535] mt-4 md:mt-6 mb-3 md:mb-4 font-inter">
           Superapp Leaderboard
         </h1>
-{/* Two-column layout */}
-<div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-  {/* Left column */}
-  <div className="md:col-span-4 space-y-3">
-    {/* Podium + Referral */}
-    <div className="w-full bg-white rounded-xl shadow-sm p-3">
-      <div className="space-y-2">
-        <div className="flex justify-center items-end space-x-3">
-          {arrangedUsers.map((user) => (
-            <div key={user.rank} className="flex flex-col items-center">
-              <div className="relative mb-2">
+    {/* Two-column layout */}
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+      {/* Left column */}
+      <div className="md:col-span-4 space-y-3">
+        {/* Podium + Referral */}
+        <div className="w-full bg-white rounded-xl shadow-sm p-3">
+          <div className="space-y-2">
+            <div className="flex justify-center items-end space-x-3">
+              {arrangedUsers.map((user) => (
+                <div key={user.rank} className="flex flex-col items-center">
+                  <div className="relative mb-2">
                 <Avatar
                   className={`${user.rank === 1 ? "h-16 w-16" : "h-14 w-14"} border-2 ${
                     user.rank === 1

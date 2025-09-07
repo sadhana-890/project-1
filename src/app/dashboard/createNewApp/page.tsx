@@ -1,58 +1,12 @@
 "use client";
 
-import React, { useState, ChangeEvent, useEffect, useCallback } from "react"
+import React, { useState, ChangeEvent, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { TextField, FileUploadArea } from "./components/forms"
 import { StepIndicator } from "./components/layout"
-
-// Lexical imports
-import { LexicalComposer } from '@lexical/react/LexicalComposer';
-import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { ContentEditable } from '@lexical/react/LexicalContentEditable';
-import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
-import { AutoFocusPlugin } from '@lexical/react/LexicalAutoFocusPlugin';
-import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
-import { ListPlugin } from '@lexical/react/LexicalListPlugin';
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-
-// Lexical nodes
-import { LinkNode } from '@lexical/link';
-import { ListNode, ListItemNode } from '@lexical/list';
-import { HeadingNode, QuoteNode } from '@lexical/rich-text';
-import { CodeNode } from '@lexical/code';
-
-// Lexical commands and utilities
-import {
-  $getSelection,
-  $isRangeSelection,
-  FORMAT_TEXT_COMMAND,
-  FORMAT_ELEMENT_COMMAND,
-  UNDO_COMMAND,
-  REDO_COMMAND,
-  SELECTION_CHANGE_COMMAND,
-  CAN_UNDO_COMMAND,
-  CAN_REDO_COMMAND,
-  $createParagraphNode,
-  ElementFormatType,
-  $getRoot,
-} from 'lexical';
-import { TOGGLE_LINK_COMMAND } from '@lexical/link';
-import {
-  INSERT_ORDERED_LIST_COMMAND,
-  INSERT_UNORDERED_LIST_COMMAND,
-} from '@lexical/list';
-import { $createHeadingNode, $createQuoteNode } from '@lexical/rich-text';
-import { $setBlocksType } from '@lexical/selection';
-
-// Lucide icons
-import {
-  Undo2,
-  Redo2,
-  ChevronDown,
-  AlignJustify,
-} from 'lucide-react';
+import ReactMarkdown from 'react-markdown'
 
 // TypeScript interfaces
 interface FormData {
@@ -62,345 +16,75 @@ interface FormData {
   description: string;
 }
 
-interface DropdownOption {
+// Markdown Editor Component
+const MarkdownEditor: React.FC<{
   value: string;
-  label: string;
-  action: () => void;
-}
-
-type ElementFormatOptions = 'left' | 'center' | 'right' | 'justify';
-type HeadingLevel = 'h1' | 'h2' | 'h3';
-
-// Lexical theme with text colors
-const theme = {
-  ltr: 'ltr',
-  rtl: 'rtl',
-  paragraph: 'mb-1 text-sm leading-relaxed',
-  quote: 'border-l-4 border-gray-400 pl-4 italic text-gray-600 my-2',
-  heading: {
-    h1: 'text-2xl font-bold mb-2',
-    h2: 'text-xl font-bold mb-2',
-    h3: 'text-lg font-bold mb-2',
-  },
-  list: {
-    nested: { listitem: 'list-item' },
-    ol: 'list-decimal list-inside mb-2',
-    ul: 'list-disc list-inside mb-2',
-    listitem: 'mb-1',
-  },
-  link: 'text-blue-600 underline cursor-pointer hover:text-blue-800',
-  text: {
-    bold: 'font-bold',
-    italic: 'italic',
-    underline: 'underline',
-    strikethrough: 'line-through',
-    code: 'bg-gray-100 px-1 py-0.5 rounded text-sm font-mono',
-  },
-  code: 'bg-gray-100 p-2 rounded font-mono text-sm my-2 block overflow-x-auto',
-};
-
-// Text Format Dropdown Component
-const TextFormatDropdown: React.FC<{
-  currentValue: string;
-  onSelect: (type: string) => void;
-}> = ({ currentValue, onSelect }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const options: DropdownOption[] = [
-    { value: 'paragraph', label: 'Normal text', action: () => onSelect('paragraph') },
-    { value: 'h1', label: 'Heading 1', action: () => onSelect('h1') },
-    { value: 'h2', label: 'Heading 2', action: () => onSelect('h2') },
-    { value: 'h3', label: 'Heading 3', action: () => onSelect('h3') },
-  ];
-
+  onChange: (value: string) => void;
+}> = ({ value, onChange }) => {
   return (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 h-8 rounded hover:bg-gray-200 text-sm text-gray-700 border border-gray-300 bg-white min-w-[120px]"
-      >
-        <span>{currentValue}</span>
-        <ChevronDown size={12} />
-      </button>
-      
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <div 
-            className="fixed inset-0 z-40" 
-            onClick={() => setIsOpen(false)} 
+    <div className="border rounded-md overflow-hidden">
+      {/* Toolbar */}
+      <div className="bg-white border-b border-gray-200 px-4 py-2 flex gap-6 text-sm text-gray-600">
+        <span className="hover:bg-gray-100 px-2 py-1 rounded cursor-pointer">File</span>
+        <span className="hover:bg-gray-100 px-2 py-1 rounded cursor-pointer">Formatting</span>
+        <span className="hover:bg-gray-100 px-2 py-1 rounded cursor-pointer">Theme</span>
+      </div>
+
+      {/* Editor Container */}
+      <div className="flex min-h-[200px]">
+        {/* Left Pane - Editor */}
+        <div className="w-1/2 flex flex-col">
+          <textarea
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className="flex-1 p-3 border-none outline-none resize-none font-mono text-sm leading-relaxed bg-white text-gray-800 min-h-[200px] overflow-x-auto overflow-y-auto"
+            placeholder="Write your app description in markdown..."
           />
-          {/* Dropdown Menu */}
-          <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded shadow-lg z-50 min-w-[150px]">
-            {options.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => {
-                  option.action();
-                  setIsOpen(false);
-                }}
-                className="block w-full text-left px-3 py-2 text-sm hover:bg-gray-100 first:rounded-t last:rounded-b"
-              >
-                {option.label}
-              </button>
-            ))}
+        </div>
+
+        {/* Right Pane - Preview */}
+        <div className="w-1/2 border-l border-gray-200 bg-white overflow-y-auto overflow-x-auto">
+          <div className="p-3 prose prose-gray max-w-none text-sm">
+            <ReactMarkdown
+              components={{
+                h1: ({children}) => <h1 className="text-xl font-bold mb-2">{children}</h1>,
+                h2: ({children}) => <h2 className="text-lg font-bold mb-2">{children}</h2>,
+                h3: ({children}) => <h3 className="text-base font-bold mb-2">{children}</h3>,
+                h4: ({children}) => <h4 className="text-sm font-bold mb-2">{children}</h4>,
+                h5: ({children}) => <h5 className="text-sm font-bold mb-2">{children}</h5>,
+                h6: ({children}) => <h6 className="text-xs font-bold mb-2">{children}</h6>,
+                p: ({children}) => <p className="mb-2 leading-relaxed text-sm">{children}</p>,
+                strong: ({children}) => <strong className="font-bold">{children}</strong>,
+                em: ({children}) => <em className="italic">{children}</em>,
+                blockquote: ({children}) => (
+                  <blockquote className="border-l-4 border-gray-300 pl-3 italic mb-2 text-gray-600">
+                    {children}
+                  </blockquote>
+                ),
+                ul: ({children}) => <ul className="list-disc pl-4 mb-2">{children}</ul>,
+                ol: ({children}) => <ol className="list-decimal pl-4 mb-2">{children}</ol>,
+                li: ({children}) => <li className="mb-1 text-sm">{children}</li>,
+                code: ({children, className}) => {
+                  const isInline = !className
+                  return isInline ? (
+                    <code className="bg-gray-100 px-1 py-0.5 rounded text-xs font-mono">
+                      {children}
+                    </code>
+                  ) : (
+                    <code className="block bg-gray-100 p-2 rounded text-xs font-mono overflow-x-auto mb-2">
+                      {children}
+                    </code>
+                  )
+                }
+              }}
+            >
+              {value || '*Preview will appear here...*'}
+            </ReactMarkdown>
           </div>
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
-};
-
-// Text Alignment Dropdown Component
-const AlignmentDropdown: React.FC<{
-  currentAlignment: ElementFormatOptions;
-  onSelect: (alignment: ElementFormatOptions) => void;
-}> = ({ currentAlignment, onSelect }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const options = [
-    { value: 'left' as ElementFormatOptions, label: 'Align Left' },
-    { value: 'center' as ElementFormatOptions, label: 'Align Center' },
-    { value: 'right' as ElementFormatOptions, label: 'Align Right' },
-    { value: 'justify' as ElementFormatOptions, label: 'Justify' },
-  ];
-
-  return (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 h-8 rounded hover:bg-gray-200 text-sm text-gray-700 border border-gray-300 bg-white"
-      >
-        <AlignJustify size={16} />
-        <ChevronDown size={12} />
-      </button>
-      
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <div 
-            className="fixed inset-0 z-40" 
-            onClick={() => setIsOpen(false)} 
-          />
-          {/* Dropdown Menu */}
-          <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded shadow-lg z-50 min-w-[120px]">
-            {options.map((option) => (
-              <button
-                key={option.value}
-                type="button"
-                onClick={() => {
-                  onSelect(option.value);
-                  setIsOpen(false);
-                }}
-                className={`block w-full text-left px-3 py-2 text-sm hover:bg-gray-100 first:rounded-t last:rounded-b ${
-                  currentAlignment === option.value ? 'bg-blue-50 text-blue-700' : ''
-                }`}
-              >
-                {option.label}
-              </button>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
-};
-
-// Color Picker Dropdown Component
-const ColorDropdown: React.FC<{
-  onColorSelect: (color: string) => void;
-}> = ({ onColorSelect }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [currentColor, setCurrentColor] = useState<string>('#000000');
-
-  const colors = [
-    '#000000', '#333333', '#666666', '#999999', '#CCCCCC', '#FFFFFF',
-    '#FF0000', '#FF6600', '#FFCC00', '#00FF00', '#0066FF', '#6600FF',
-    '#FF0066', '#00FFFF', '#FF00FF', '#FFFF00', '#800080', '#008080',
-  ];
-
-  const handleColorSelect = (color: string) => {
-    setCurrentColor(color);
-    onColorSelect(color);
-    setIsOpen(false);
-  };
-
-  return (
-    <div className="relative">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 h-8 rounded hover:bg-gray-200 text-sm text-gray-700 border border-gray-300 bg-white"
-      >
-        <div 
-          className="w-4 h-4 rounded-sm border border-gray-400" 
-          style={{ backgroundColor: currentColor }}
-        />
-        <ChevronDown size={12} />
-      </button>
-      
-      {isOpen && (
-        <>
-          {/* Backdrop */}
-          <div 
-            className="fixed inset-0 z-40" 
-            onClick={() => setIsOpen(false)} 
-          />
-          {/* Color Picker Menu */}
-          <div className="absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded shadow-lg z-50 p-2">
-            <div className="grid grid-cols-6 gap-1">
-              {colors.map((color) => (
-                <button
-                  key={color}
-                  type="button"
-                  onClick={() => handleColorSelect(color)}
-                  className="w-6 h-6 rounded border border-gray-300 hover:scale-110 transition-transform"
-                  style={{ backgroundColor: color }}
-                  title={color}
-                />
-              ))}
-            </div>
-          </div>
-        </>
-      )}
-    </div>
-  );
-};
-
-// Main Toolbar Component - Step by Step
-function StepByStepToolbar() {
-  const [editor] = useLexicalComposerContext();
-  
-  // State management
-  const [canUndo, setCanUndo] = useState<boolean>(false);
-  const [canRedo, setCanRedo] = useState<boolean>(false);
-  const [currentBlockType, setCurrentBlockType] = useState<string>('Normal text');
-  const [currentAlignment, setCurrentAlignment] = useState<ElementFormatOptions>('left');
-
-  // Register undo/redo listeners
-  useEffect(() => {
-    const unregisterUndo = editor.registerCommand(
-      CAN_UNDO_COMMAND,
-      (payload: boolean) => {
-        setCanUndo(payload);
-        return false;
-      },
-      1
-    );
-
-    const unregisterRedo = editor.registerCommand(
-      CAN_REDO_COMMAND,
-      (payload: boolean) => {
-        setCanRedo(payload);
-        return false;
-      },
-      1
-    );
-
-    return () => {
-      unregisterUndo();
-      unregisterRedo();
-    };
-  }, [editor]);
-
-  // Handle text format changes
-  const handleTextFormat = useCallback((type: string) => {
-    editor.update(() => {
-      const selection = $getSelection();
-      if ($isRangeSelection(selection)) {
-        if (type === 'paragraph') {
-          $setBlocksType(selection, () => $createParagraphNode());
-          setCurrentBlockType('Normal text');
-        } else if (type.startsWith('h')) {
-          $setBlocksType(selection, () => $createHeadingNode(type as HeadingLevel));
-          setCurrentBlockType(`Heading ${type.charAt(1)}`);
-        }
-      }
-    });
-  }, [editor]);
-
-  // Handle alignment changes
-  const handleAlignment = useCallback((alignment: ElementFormatOptions) => {
-    editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, alignment);
-    setCurrentAlignment(alignment);
-  }, [editor]);
-
-  // Handle color changes
-  const handleColorChange = useCallback((color: string) => {
-    editor.update(() => {
-      const selection = $getSelection();
-      if ($isRangeSelection(selection)) {
-        selection.getNodes().forEach((node) => {
-          if (node.__type === 'text') {
-            node.setStyle(`color: ${color}`);
-          }
-        });
-      }
-    });
-  }, [editor]);
-
-  return (
-    <div className="flex items-center gap-2 p-2 border-b bg-gray-50">
-      {/* Step 1: Undo/Redo - Working perfectly */}
-      <button
-        type="button"
-        onClick={() => editor.dispatchCommand(UNDO_COMMAND, undefined)}
-        disabled={!canUndo}
-        className="flex items-center justify-center w-8 h-8 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-        title="Undo"
-      >
-        <Undo2 size={16} />
-      </button>
-
-      <button
-        type="button"
-        onClick={() => editor.dispatchCommand(REDO_COMMAND, undefined)}
-        disabled={!canRedo}
-        className="flex items-center justify-center w-8 h-8 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
-        title="Redo"
-      >
-        <Redo2 size={16} />
-      </button>
-
-      {/* Separator */}
-      <div className="w-px h-6 bg-gray-300 mx-1" />
-
-      {/* Step 2: Text Format Dropdown - Normal, H1, H2, H3 */}
-      <TextFormatDropdown
-        currentValue={currentBlockType}
-        onSelect={handleTextFormat}
-      />
-
-      {/* Step 3: Text Alignment Dropdown */}
-      <AlignmentDropdown
-        currentAlignment={currentAlignment}
-        onSelect={handleAlignment}
-      />
-
-      {/* Step 4: Color Dropdown */}
-      <ColorDropdown onColorSelect={handleColorChange} />
-    </div>
-  );
-}
-
-// Editor configuration
-const editorConfig = {
-  namespace: 'StepByStepEditor',
-  theme,
-  onError(error: Error) {
-    console.error('Lexical Error:', error);
-  },
-  nodes: [
-    LinkNode,
-    ListNode,
-    ListItemNode,
-    HeadingNode,
-    QuoteNode,
-    CodeNode,
-  ],
 };
 
 // Main Form Component
@@ -409,7 +93,7 @@ const CreateNewAppForm: React.FC = () => {
     appName: "",
     appHandle: "",
     webhookUrl: "",
-    description: "",
+    description: "# h1 title\n## h2 title\n### h3 title\n#### h4 title\n##### h5 title\n###### h6 title\n\n**Bold text**\n*Italic text*\n***Italic bold text***\n\n> Blockquotes text\n-Not numbered list items\n-Not numbered list items\n-Not numbered list items\n1. Numbered list items\n2. Numbered list items\n3. Numbered list items\n*Not numbered list items\n*Not numbered list items\n*Not numbered list items\n\n![Image name](./src/images/001_image.jpg)\n\n```cpp\nstd::cout << \"Hello World!\" << std::endl;\n```",
   });
 
   const handleInputChange = useCallback((field: keyof FormData, value: string): void => {
@@ -428,10 +112,10 @@ const CreateNewAppForm: React.FC = () => {
   }, [formData]);
 
   return (
-    <div className="w-full max-w-none sm:max-w-6xl mx-auto p-3 sm:p-6 lg:p-8">
+    <div className="w-full max-w-none sm:max-w-6xl mx-auto p-2 sm:p-6 lg:p-2">
       {/* Header */}
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-2">
+        <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-2 font-urbanist">
           Create a New App
         </h1>
       </div>
@@ -461,6 +145,7 @@ const CreateNewAppForm: React.FC = () => {
 
           {/* App Handle */}
           <TextField
+          className="shadow-none"
             label="App Handle"
             placeholder="@exampleapp"
             required
@@ -484,7 +169,7 @@ const CreateNewAppForm: React.FC = () => {
               <div className="relative">
                 <Input
                   placeholder="https://api.yourserver.com/webhook"
-                  className="pr-24 sm:pr-32"
+                  className="pr-24 sm:pr-32 shadow-none"
                   value={formData.webhookUrl}
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
                     handleInputChange("webhookUrl", e.target.value)
@@ -494,7 +179,7 @@ const CreateNewAppForm: React.FC = () => {
                   variant="outline"
                   size="sm"
                   onClick={handleTestConnection}
-                  className="absolute right-1 sm:right-2 top-1/2 transform -translate-y-1/2 h-6 sm:h-7 text-xs px-2 sm:px-3"
+                  className="absolute right-1 sm:right-2 top-1/2 transform -translate-y-1/2 h-6 sm:h-7 text-xs px-2 sm:px-3 border-blue-500 text-blue-600 hover:bg-blue-50 hover:border-blue-600 hover:text-blue-700"
                   type="button"
                 >
                   <span className="hidden sm:inline">Test Connection</span>
@@ -513,40 +198,15 @@ const CreateNewAppForm: React.FC = () => {
               App Description <span className="text-red-500">*</span>
             </Label>
 
-            {/* Lexical Rich Text Editor */}
-            <div className="border rounded-md overflow-hidden">
-              <LexicalComposer initialConfig={editorConfig}>
-                <StepByStepToolbar />
-                <div className="relative">
-                  <RichTextPlugin
-                    contentEditable={
-                      <ContentEditable 
-                        className="p-3 min-h-[200px] outline-none resize-none overflow-auto focus:ring-0"
-                        style={{ fontSize: '14px' }}
-                      />
-                    }
-                    placeholder={
-                      <div className="text-gray-400 absolute top-3 left-3 pointer-events-none">
-                        Enter your app description...
-                      </div>
-                    }
-                    ErrorBoundary={() => (
-                      <div className="p-3 text-red-500">
-                        Editor error occurred
-                      </div>
-                    )}
-                  />
-                  <HistoryPlugin />
-                  <AutoFocusPlugin />
-                  <LinkPlugin />
-                  <ListPlugin />
-                </div>
-              </LexicalComposer>
-            </div>
+            {/* Markdown Editor */}
+            <MarkdownEditor
+              value={formData.description}
+              onChange={(value) => handleInputChange("description", value)}
+            />
           </div>
 
           {/* Right Column - File Upload */}
-          <div className="w-full lg:w-1/3 border border-gray-300 rounded-md">
+          <div className="w-full lg:w-1/3 border-1 rounded-2xl h-70">
             <FileUploadArea />
           </div>
         </div>

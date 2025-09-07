@@ -2,7 +2,9 @@ import React, { useState, useRef, DragEvent, ChangeEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { X, Upload, File, Image } from 'lucide-react';
+// Removed incorrect import of Image from next/rect
+import { X, Upload, File, Image as FileIconImage } from 'lucide-react';
+import Image from 'next/image';
 
 interface UploadedFile {
   file: File;
@@ -119,10 +121,9 @@ const FileUploadArea: React.FC = () => {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
-
   const getFileIcon = (fileType: string) => {
     if (fileType.startsWith('image/')) {
-      return <Image className="w-4 h-4 text-blue-500" />;
+      return <FileIconImage className="w-4 h-4 text-blue-500" />;
     }
     return <File className="w-4 h-4 text-gray-500" />;
   };
@@ -160,23 +161,22 @@ const FileUploadArea: React.FC = () => {
         onClick={handleBrowseClick}
       >
         <CardContent className="flex flex-col items-center justify-center p-2 text-center h-full">
-          <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-100 rounded-full flex items-center justify-center mb-1 sm:mb-2">
-            <Upload className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
-          </div>
-          <div className="text-xs text-gray-600 mb-1">
-            {isDragOver ? 'Drop files here' : 'Drag files or'}
-          </div>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className="text-xs px-2 sm:px-3 py-0.5 sm:py-1"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleBrowseClick();
-            }}
-          >
-            Browse files
-          </Button>
+            <Image src="/icons/upload.svg" alt="upload image" width={16} height={16} className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
+            
+            <div className="text-xs text-gray-600 mb-1">
+              {isDragOver ? 'Drop files here' : 'Drag files or'}
+            </div>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="text-xs px-2 sm:px-3 py-0.5 sm:py-1"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleBrowseClick();
+              }}
+            >
+              Browse files
+            </Button>
         </CardContent>
       </Card>
       
