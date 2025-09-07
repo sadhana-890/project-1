@@ -88,7 +88,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
                   href={item.path}
                   className={`flex items-center px-2 py-1.5 rounded text-sm transition ${
                     isActive
-                      ? "bg-purple-500 text-white"
+                      ? "bg-[#8759FF] text-white"
                       : "text-gray-600 hover:bg-gray-100"
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
