@@ -1,6 +1,6 @@
 "use client";
 
-export default function Dashboard() {
+export default function Settings() {
   return (
     <div>
       <h1 className="text-2xl font-bold">User Settings</h1>
