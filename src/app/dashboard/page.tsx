@@ -104,7 +104,7 @@ export default function Dashboard() {
                       <tr key={app.id} className="hover:bg-slate-50">
                         <td className="px-3 py-3">
                           <div className="flex items-center gap-2">
-                            <Image src={app.logo} alt="logo" className="size-8 rounded-lg" />
+                            <Image src={app.logo} alt="logo" width={32} height={32} className="size-8 rounded-lg" />
                             <div className="font-medium text-xs">{app.name}</div>
                           </div>
                         </td>
