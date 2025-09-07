@@ -1,8 +1,9 @@
 "use client";
 
-import Footer from '@/app/footer/page'; // Updated import path
-import Header from '@/app/header/page'; // Updated import path
+import Footer from '@/app/footer/page';
+import Header from '@/app/header/page';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
@@ -82,12 +83,21 @@ const PhoneVerificationPage = () => {
     if (phoneNumber && agreed) {
       console.log('Sending code to:', selectedCountry.code + phoneNumber);
     }
-    router.push('/register/verify'); // Fixed route path
+    router.push('/register/verify');
   };
 
-  const handleCountrySelect = (country: typeof countries[0]) => {
+  const handleCountrySelect = (country: Country) => {
     setSelectedCountry(country);
     setShowDropdown(false);
+  };
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const target = e.target as HTMLImageElement;
+    const nextElement = target.nextElementSibling as HTMLElement;
+    target.style.display = 'none';
+    if (nextElement) {
+      nextElement.classList.remove('hidden');
+    }
   };
 
   useEffect(() => {
@@ -113,7 +123,7 @@ const PhoneVerificationPage = () => {
       <Header />
       
       {/* Main Content */}
-      <main className="flex-1 flex  justify-center px-4 py-8 sm:py-12">
+      <main className="flex-1 flex justify-center px-4 py-8 sm:py-12">
         <div className="max-w-md w-full space-y-6">
           {/* Title Section */}
           <div className="text-center">
@@ -121,12 +131,12 @@ const PhoneVerificationPage = () => {
               Verify Your Phone
             </h1>
             <p className="text-gray-600 text-sm sm:text-base">
-              We'll send you a code to verify your phone number.
+              We&apos;ll send you a code to verify your phone number.
             </p>
           </div>
 
           {/* Form Section */}
-          
+          <div className="space-y-4">
             {/* Phone Number Input */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -143,15 +153,13 @@ const PhoneVerificationPage = () => {
                     className="flex items-center px-3 py-3 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-l-lg transition-colors"
                   >
                     {selectedCountry.flagImage ? (
-                      <img 
+                      <Image 
                         src={selectedCountry.flagImage} 
                         alt={`Flag of ${selectedCountry.country}`}
-                        className="w-5 h-3 object-cover rounded mr-2"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                          target.nextElementSibling?.classList.remove('hidden');
-                        }}
+                        width={20}
+                        height={12}
+                        className="object-cover rounded mr-2"
+                        onError={handleImageError}
                       />
                     ) : null}
                     <span className={`text-base mr-2 ${selectedCountry.flagImage ? 'hidden' : ''}`}>
@@ -185,15 +193,13 @@ const PhoneVerificationPage = () => {
                             className="w-full flex items-center px-3 py-2 hover:bg-gray-50 text-left text-sm transition-colors"
                           >
                             {country.flagImage ? (
-                              <img 
+                              <Image 
                                 src={country.flagImage} 
                                 alt={`Flag of ${country.country}`}
-                                className="w-5 h-3 object-cover rounded mr-2"
-                                onError={(e) => {
-                                  const target = e.target as HTMLImageElement;
-                                  target.style.display = 'none';
-                                  target.nextElementSibling?.classList.remove('hidden');
-                                }}
+                                width={20}
+                                height={12}
+                                className="object-cover rounded mr-2"
+                                onError={handleImageError}
                               />
                             ) : null}
                             <span className={`text-base mr-2 ${country.flagImage ? 'hidden' : ''}`}>
@@ -246,7 +252,7 @@ const PhoneVerificationPage = () => {
               >
                 Send Code
               </Button>
-            
+            </div>
           </div>
         </div>
       </main>

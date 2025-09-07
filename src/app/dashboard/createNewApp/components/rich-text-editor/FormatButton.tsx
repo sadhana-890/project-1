@@ -1,4 +1,5 @@
 import React from "react"
+import Image from "next/image"
 
 interface FormatButtonProps {
   icon: string
@@ -20,7 +21,7 @@ const FormatButton: React.FC<FormatButtonProps> = ({
     aria-label={alt}
     tabIndex={0}
   >
-    <img src={icon} alt={alt} width={20} height={20} />
+    <Image src={icon} alt={alt} width={20} height={20} />
   </button>
 )
 

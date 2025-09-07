@@ -2,6 +2,7 @@ import React, { useRef } from "react"
 import { Button } from "@/components/ui/button"
 import FormatButton from "./FormatButton"
 import TextStyleDropdown from "./TextStyleDropdown"
+import Image from "next/image"
 import {
   Select,
   SelectTrigger,
@@ -119,7 +120,7 @@ const RichTextToolbar: React.FC<RichTextToolbarProps> = ({
             onUndo()
           }}
         >
-          <img src="/icons/undo.svg" alt="undo" className="w-3.5 h-3.5" />
+          <Image src="/icons/undo.svg" alt="undo" className="w-3.5 h-3.5" />
         </Button>
         <Button
           variant="ghost"
@@ -131,7 +132,7 @@ const RichTextToolbar: React.FC<RichTextToolbarProps> = ({
             onRedo()
           }}
         >
-          <img src="/icons/redo.svg" alt="redo" className="w-3.5 h-3.5" />
+          < Image src="/icons/redo.svg" alt="redo" className="w-3.5 h-3.5" />
         </Button>
       </div>
 
@@ -157,7 +158,7 @@ const RichTextToolbar: React.FC<RichTextToolbarProps> = ({
         >
           <SelectTrigger className="w-[32px] h-7 p-0 border-none shadow-none focus:ring-0 focus:outline-none bg-transparent">
             <SelectValue>
-              <img
+              <Image
                 src={
                   alignOptions.find((opt) => opt.value === textAlign)?.icon ||
                   "/icons/align-left.svg"

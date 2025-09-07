@@ -32,7 +32,7 @@ const SuperappDocs = () => {
               
               <ul className="text-blue-600 mb-6 space-y-1">
                 <li>• <a href="#" className="hover:underline">Advanced Interface Development</a></li>
-                <li>• <a href="#" className="hover:underline">Tips & Best Practices for Developers</a></li>
+                <li>• <a href="#" className="hover:underline">Tips &amp; Best Practices for Developers</a></li>
               </ul>
 
               {/* Input Section */}
@@ -45,7 +45,7 @@ const SuperappDocs = () => {
                 </p>
                 
                 <ul className="text-blue-600 mb-4 space-y-1">
-                  <li>• <a href="#" className="hover:underline">Commands that are registered in messages and can be selected from a list after typing "/"</a></li>
+                  <li>• <a href="#" className="hover:underline">Commands that are registered in messages and can be selected from a list after typing &quot;/&quot;</a></li>
                   <li>• <a href="#" className="hover:underline">Keyboards that replace the input field with predefined answer options</a></li>
                   <li>• <a href="#" className="hover:underline">Buttons that appear inside messages sent by the bot</a></li>
                 </ul>
@@ -70,7 +70,7 @@ const SuperappDocs = () => {
 
                 <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
                   <p className="text-sm text-blue-800">
-                    <strong>Note:</strong> Mini Apps can support multiple languages that adapt to the users' language settings in the app.
+                    <strong>Note:</strong> Mini Apps can support multiple languages that adapt to the users&apos; language settings in the app.
                   </p>
                 </div>
               </div>
@@ -103,7 +103,7 @@ const SuperappDocs = () => {
                 </div>
 
                 <p className="text-gray-600 mb-6">
-                  If you develop a mini app, be sure to follow our design guidelines – you'll want your custom interface
+                  If you develop a mini app, be sure to follow our design guidelines – you&apos;ll want your custom interface
                   to integrate seamlessly into the app to provide the best possible user experience.
                 </p>
               </div>
@@ -113,7 +113,7 @@ const SuperappDocs = () => {
                 <h2 className="text-2xl font-semibold text-gray-900 mb-4">Language Support</h2>
                 <p className="text-gray-600 mb-4">
                   Bots can change their interfaces to support multiple languages – updating inputs and information on the fly.
-                  A user's language code is included in every relevant update as an IETF language tag, allowing bots to adapt
+                  A user&apos;s language code is included in every relevant update as an IETF language tag, allowing bots to adapt
                   accordingly.
                 </p>
                 
@@ -124,7 +124,7 @@ const SuperappDocs = () => {
                 <ul className="text-blue-600 mb-6 space-y-2">
                   <li>• <a href="#" className="hover:underline">Your interfaces, texts and results should adapt seamlessly to the language_code, without user interaction.</a></li>
                   <li>• <a href="#" className="hover:underline">Commands, keyboards and messages must respect language_code values.</a></li>
-                  <li>• <a href="#" className="hover:underline">HTML5 Canvas can pass language_code if specified as a URL parameter, generated from the User object’s language_code.</a></li>
+                  <li>• <a href="#" className="hover:underline">HTML5 Canvas can pass language_code if specified as a URL parameter, generated from the User object&apos;s language_code.</a></li>
                   <li>• <a href="#" className="hover:underline">Your interfaces, texts and inline results should adapt seamlessly to the language_code, without user interaction.</a></li>
                 </ul>
 

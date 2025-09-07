@@ -1,6 +1,7 @@
-/* import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent } from 'react';
 import { Label } from '@/components/ui/label';
-import { RichTextEditor } from '../rich-text-editor';
+import Image from 'next/image';
+
 
 interface TextareaFieldProps {
   label: string;
@@ -32,15 +33,11 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
       <div className="flex items-center gap-2">
         <Label className="text-sm font-medium text-gray-700">{label}</Label>
         {required && <span className="text-red-500">*</span>}
-        {helpText && <img src="/icons/helpCircle.svg" alt="help" className="w-4 h-4" />}
+        {helpText && <Image src="/icons/helpCircle.svg" alt="help" className="w-4 h-4" />}
       </div>
-      <RichTextEditor
-        value={value}
-        onChange={handleChange}
-        placeholder={placeholder}
-      />
+      
     </div>
   );
 };
 
-export default TextareaField; */
+export default TextareaField;

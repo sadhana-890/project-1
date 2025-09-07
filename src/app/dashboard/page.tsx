@@ -1,12 +1,12 @@
 "use client"
 
 import React from "react";
-import { Bell, Plus, ChevronDown } from "lucide-react";
+import {  Plus } from "lucide-react";
 import { metrics, apps, devLogs } from "@/lib/mockUsers";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 // ---- UI helpers -----------------------------------
 const StatusPill: React.FC<{ status: "Active" | "Inactive" | "Paused" }> = ({ status }) => {
@@ -29,7 +29,7 @@ const LogIcon: React.FC<{ type: "success" | "error" | "warning" }> = ({ type }) 
 };
 
 // ---- Page -----------------------------------------
-export default function dashboard() {
+export default function Dashboard() {
   const { user } = useAuth();
   const router = useRouter();
 
@@ -104,7 +104,7 @@ export default function dashboard() {
                       <tr key={app.id} className="hover:bg-slate-50">
                         <td className="px-3 py-3">
                           <div className="flex items-center gap-2">
-                            <img src={app.logo} alt="logo" className="size-8 rounded-lg" />
+                            <Image src={app.logo} alt="logo" className="size-8 rounded-lg" />
                             <div className="font-medium text-xs">{app.name}</div>
                           </div>
                         </td>

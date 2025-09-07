@@ -191,7 +191,7 @@ const FileUploadArea: React.FC = () => {
             >
               <div className="flex items-center space-x-2 flex-1 min-w-0">
                 {uploadedFile.preview ? (
-                  <img
+                  <Image
                     src={uploadedFile.preview}
                     alt={uploadedFile.file.name}
                     className="w-8 h-8 object-cover rounded border"
