@@ -45,7 +45,17 @@ export default function LeaderboardSidebar() {
   ];
 
   // Right side rows (mock)
-  const rows = [
+  type Row = {
+    name: string;
+    handle: string;
+    refs: number;
+    tokens: number;
+    avatar: string;
+    you?: boolean;
+    highlight?: "purple" | "rose";
+  };
+
+  const rows: Row[] = [
     { name: "Mike", handle: "03D__153d143", refs: 12, tokens: 8900, you: true, avatar: "/avatars/avatar1.svg" },
     { name: "Sam", handle: "03D__153d143", refs: 15, tokens: 9300, highlight: "purple", avatar: "/avatars/avatar2.svg" },
     { name: "Ninja", handle: "03D__153d143", refs: 12, tokens: 8900, avatar: "/avatars/avatar3.svg" },
@@ -281,8 +291,8 @@ export default function LeaderboardSidebar() {
               </div>
             </div>
 
-            {/* Get in Touch */}
-            <div className="w-full bg-white rounded-xl shadow-sm p-3">
+            {/* Get in Touch - Desktop only */}
+            <div className="hidden md:block w-full bg-white rounded-xl shadow-sm p-3">
               <h3 className="text-sm font-bold text-[#060535] mb-2">
                 Get in Touch
               </h3>
@@ -353,6 +363,19 @@ export default function LeaderboardSidebar() {
                 ))}
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Get in Touch - Mobile only (at the bottom) */}
+        <div className="md:hidden w-full bg-white rounded-xl shadow-sm p-3 mt-4">
+          <h3 className="text-sm font-bold text-[#060535] mb-2">
+            Get in Touch
+          </h3>
+          <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 cursor-pointer transition-colors">
+            <div className="w-5 h-5 bg-black rounded-full flex items-center justify-center">
+              <Twitter className="w-2.5 h-2.5 text-white" />
+            </div>
+            <span className="text-xs">Twitter</span>
           </div>
         </div>
       </div>
