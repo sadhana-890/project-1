@@ -161,10 +161,10 @@ const FileUploadArea: React.FC = () => {
         onClick={handleBrowseClick}
       >
         <CardContent className="flex flex-col items-center justify-center p-2 text-center h-full">
-            <Image src="/icons/upload.svg" alt="upload image" width={16} height={16} className="w-3 h-3 sm:w-4 sm:h-4 text-blue-600" />
+            <Image src="/icons/upload.svg" alt="upload image" width={25} height={25} className="w-6 h-6 sm:w-5 sm:h-5 text-blue-600" />
             
-            <div className="text-xs text-gray-600 mb-1">
-              {isDragOver ? 'Drop files here' : 'Drag files or'}
+            <div className="text-xs text-gray-800 mb-1">
+              {isDragOver ? 'Drop file(s) to start uploading' : 'Drop file(s) to start uploading'}
             </div>
             <Button 
               variant="outline" 
@@ -194,7 +194,7 @@ const FileUploadArea: React.FC = () => {
                   <Image
                     src={uploadedFile.preview}
                     alt={uploadedFile.file.name}
-                    className="w-8 h-8 object-cover rounded border"
+                    className="w-10 h-10 object-cover rounded border"
                   />
                 ) : (
                   <div className="w-8 h-8 flex items-center justify-center bg-gray-200 rounded border">

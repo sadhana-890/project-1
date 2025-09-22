@@ -1,14 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Menu, Search, Bell, ChevronDown } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
-
-interface User {
-  name: string;
-  role: string;
-}
 
 interface HeaderProps {
   isMobileMenuOpen: boolean;
@@ -16,13 +9,12 @@ interface HeaderProps {
 }
 
 export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: HeaderProps) {
-  const { user } = useAuth();
   const [notifications, setNotifications] = useState<number>(0);
   const [search, setSearch] = useState("");
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
 
   useEffect(() => {
-    // Simulate fetching notifications (replace with API call)
+    // Simulate fetching notifications (replace with API call if needed)
     setTimeout(() => {
       setNotifications(3); // example notifications
     }, 500);
@@ -101,30 +93,22 @@ export default function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: Header
           )}
         </button>
 
-        {/* User Profile - Clean minimal design */}
-        {user && (
-          <div className="flex items-center gap-2 pl-2 pr-4 h-8 md:h-9 border border-gray-200 rounded-full cursor-pointer hover:bg-gray-50 transition-colors bg-white">
-            {/* Avatar */}
-            <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
-              <span className="text-gray-600 text-xs font-medium">
-                {user.name.charAt(0)}
-              </span>
-            </div>
-            
-            {/* User Info */}
-            <div className="hidden sm:flex flex-col leading-none min-w-0">
-              <span className="text-sm font-medium text-gray-900 truncate">
-                {user.name}
-              </span>
-              <span className="text-xs text-gray-500 truncate">
-                Developer
-              </span>
-            </div>
-
-            {/* Dropdown Arrow */}
-            <ChevronDown className="h-3 w-3 text-gray-400 flex-shrink-0" />
+        {/* User Profile - Hardcoded Alice */}
+        <div className="flex items-center gap-2 pl-2 pr-4 h-8 md:h-9 border border-gray-200 rounded-full cursor-pointer hover:bg-gray-50 transition-colors bg-white">
+          {/* Avatar */}
+          <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0">
+            <span className="text-gray-600 text-xs font-medium">A</span>
           </div>
-        )}
+
+          {/* User Info */}
+          <div className="hidden sm:flex flex-col leading-none min-w-0">
+            <span className="text-sm font-medium text-gray-900 truncate">Alice</span>
+            <span className="text-xs text-gray-500 truncate">Developer</span>
+          </div>
+
+          {/* Dropdown Arrow */}
+          <ChevronDown className="h-3 w-3 text-gray-400 flex-shrink-0" />
+        </div>
       </div>
     </header>
   );

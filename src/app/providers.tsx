@@ -1,16 +1,14 @@
-/* "use client"
+// src/components/Providers.tsx
+"use client";
 
-import { AuthProvider } from "@/context/AuthContext"
-import { ThemeProvider } from "next-themes"
-import { ReactNode } from "react"
+import { Provider } from 'react-redux';
+import { store } from '../store';
+import { ReactNode } from "react";
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-     
-        {children}
-    
-    </ThemeProvider>
-  )
+    <Provider store={store}>
+      {children}
+    </Provider>
+  );
 }
- */

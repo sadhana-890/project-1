@@ -2,20 +2,29 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Header from '@/app/header/page'
+import Header from '@/app/header/page';
 import Footer from '@/app/footer/page';
 import { Button } from '@/components/ui/button';
+import { useUpdateProfileMutation } from '@/services/userApi'; // ✅ import your RTK Query service
 
 const ProfileCreationPage: React.FC = () => {
   const [fullName, setFullName] = useState('');
   const router = useRouter();
 
-  const handleContinue = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const [updateProfile, { isLoading, isSuccess, error }] = useUpdateProfileMutation();
+
+  const handleContinue = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (fullName.trim()) {
-      console.log('Profile created for:', fullName);
-      // Add your profile creation logic here
-      router.push('./avatar'); // or wherever you want to redirect
+      const formData = new FormData();
+      formData.append("username", fullName);
+
+      try {
+        await updateProfile(formData).unwrap(); // ✅ call API
+        router.push('./avatar'); // redirect after success
+      } catch (err) {
+        console.error("Failed to update profile:", err);
+      }
     }
   };
 
@@ -50,12 +59,13 @@ const ProfileCreationPage: React.FC = () => {
             <div className='flex justify-center'>
               <Button
                 onClick={handleContinue}
-                disabled={!fullName.trim()}
-                
+                disabled={!fullName.trim() || isLoading}
               >
-                Continue
+                {isLoading ? "Saving..." : "Continue"}
               </Button>
             </div>
+
+            {error && <p className="text-red-500 text-center">Failed to save profile</p>}
           </div>
         </div>
       </div>

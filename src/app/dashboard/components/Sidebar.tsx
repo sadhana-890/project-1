@@ -16,12 +16,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
 
   const mainModules = [
     { name: "Dashboard", icon: "/icons/dashboard.svg", path: "/dashboard" },
-    { name: "API Keys", icon: "/icons/api-keys.svg", path: "/dashboard/api-keys" }, // Fixed path
+    { name: "API Keys", icon: "/icons/api-keys.svg", path: "/dashboard/api-keys" },
   ];
 
   const pages = [
     { name: "Settings", icon: "/icons/settings.svg", path: "/dashboard/settings" },
-    { name: "Logout", icon: "/icons/logout.svg", path: "/logout" }, // Updated to match app/logout location
+    { name: "Logout", icon: "/icons/logout.svg", path: "/logout" },
   ];
 
   // Close mobile menu when route changes
@@ -44,17 +44,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
   // Helper function to check if dashboard should be active
   const isDashboardActive = (itemPath: string) => {
     if (itemPath === "/dashboard") {
-      // Dashboard is active if:
-      // 1. Current path is exactly /dashboard
-      // 2. Current path starts with /dashboard/ but exclude settings, logout, and api-keys
       return pathname === "/dashboard" || 
              (pathname.startsWith("/dashboard/") && 
               !pathname.startsWith("/dashboard/settings") &&
               !pathname.startsWith("/dashboard/logout") &&
               !pathname.startsWith("/dashboard/api-keys")) ||
-             pathname === "/create-new-app" || // Adjust this path to match your actual route
-             pathname === "/apps/create" ||    // Alternative path - adjust as needed
-             pathname.includes("create-app");  // Fallback for any create app related paths
+             pathname === "/create-new-app" ||
+             pathname === "/apps/create" ||
+             pathname.includes("create-app");
     }
     return false;
   };
@@ -77,7 +74,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
         <p className="text-xs font-light text-gray-400 mb-2 font-sans">MAIN MODULES</p>
         <ul className="space-y-1">
           {mainModules.map((item) => {
-            // Use custom logic for dashboard, regular logic for others
             const isActive = item.name === "Dashboard" 
               ? isDashboardActive(item.path)
               : pathname === item.path;
@@ -93,15 +89,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <div className={`mr-2 flex-shrink-0 w-4 h-4 ${
-                    isActive ? 'brightness-0 invert bg-transparent' : ''
+                  <div className={`mr-2 flex-shrink-0 w-4 h-4 flex items-center justify-center ${
+                    isActive ? 'bg-white' : ''
                   }`}>
                     <Image
                       src={item.icon}
                       alt={item.name}
                       width={16}
                       height={16}
-                      className={`w-4 h-4 ${isActive ? 'mix-blend-multiply' : ''}`}
+                      className="w-4 h-4"
                     />
                   </div>
                   <span className="truncate">{item.name}</span>
@@ -124,13 +120,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isMobileMenuOpen, setIsMobileM
                   href={item.path}
                   className={`flex items-center px-2 py-1.5 rounded text-sm transition ${
                     isActive
-                      ? "bg-purple-500 text-white"
+                      ? "bg-[#8759FF] text-white"
                       : "text-gray-600 hover:bg-gray-100"
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  <div className={`mr-2 flex-shrink-0 w-4 h-4 ${
-                    isActive ? 'brightness-0 invert' : ''
+                  <div className={`mr-2 flex-shrink-0 w-6 h-6 rounded flex items-center justify-center ${
+                    isActive ? 'bg-white' : ''
                   }`}>
                     <Image
                       src={item.icon}
