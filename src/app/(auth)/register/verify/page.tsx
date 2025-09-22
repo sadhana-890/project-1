@@ -155,7 +155,7 @@ const OTPVerification: React.FC = () => {
 
     } catch (error: unknown) {
       setHasError(true);
-      clearOtpFields();
+      // ONLY CHANGE 1: Removed clearOtpFields() call here - keep the wrong OTP numbers
     }
   };
 
@@ -183,7 +183,7 @@ const OTPVerification: React.FC = () => {
       <Header />
       <div className="flex-1 flex justify-center px-4 py-8">
         <div className="w-full max-w-md text-center">
-          <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-6 font-inter">
+          <h1 className="text-4xl md:text-5xl font-semibold text-[#060535] mb-4 leading-snug font-inter tracking-tighter whitespace-nowrap">
             Enter OTP Code
           </h1>
 
@@ -221,7 +221,7 @@ const OTPVerification: React.FC = () => {
           </div>
 
           {hasError && (
-            <div className="mb-4 flex items-center justify-end text-red-500 text-sm">
+            <div className="mb-4 flex items-center text-red-500 text-sm" style={{ marginLeft: 'calc(50% - 164px)' }}>
                 <Image
                   src="/icons/helpCircle.svg"
                   alt="Error"

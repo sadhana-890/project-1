@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+
+import Image from 'next/image'; 
+import Forward from "/public/icons/forward.svg";
 import Header from '@/app/header/page';
 import Footer from '@/app/footer/page';
 import { Button } from '@/components/ui/button';
@@ -74,9 +76,13 @@ const ProfilePictureSelector = () => {
       <div className="flex-1 flex justify-center px-4 py-8">
         <div className="w-full max-w-sm text-center">
 
-          <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-3 font-inter">
-            Select Profile Picture
-          </h1>
+        <h1 className="text-4xl md:text-5xl font-semibold text-[#060535] mb-4 leading-snug font-inter tracking-tighter whitespace-nowrap">
+          Select Profile Picture
+        </h1>
+
+
+
+
           <p className="text-gray-600 mb-8 text-sm">
             Choose your profile picture
           </p>
@@ -94,19 +100,20 @@ const ProfilePictureSelector = () => {
             <button
               onClick={handlePrevious}
               disabled={isLoading}
-              className="absolute left-0 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-md border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 w-8 h-8  flex items-center justify-center  transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Previous avatar"
             >
-              <ChevronLeft className="w-4 h-4 text-gray-600 group-hover:text-gray-800" />
+            <Image src="/icons/backward.svg" alt="backward" width={16} height={16} className="w-4 h-4" />
+
             </button>
             
             <button
               onClick={handleNext}
               disabled={isLoading}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-md border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 w-8 h-8 flex items-center justify-center transition-colors group disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Next avatar"
             >
-              <ChevronRight className="w-4 h-4 text-gray-600 group-hover:text-gray-800" />
+            <Image src="/icons/forward.svg" alt="forward" width={16} height={16} className="w-4 h-4" />
             </button>
           </div>
           
@@ -114,15 +121,16 @@ const ProfilePictureSelector = () => {
             <Button
               onClick={handleSelect}
               disabled={isLoading}
-              className="w-full"
+              className="py-5 px-6 rounded-[3px]"
             >
               {isLoading ? 'Updating...' : 'Select'}
             </Button>
+            <br/>
             
             <button
               onClick={handleSkip}
               disabled={isLoading}
-              className="block mx-auto text-gray-600 hover:text-gray-800 font-medium transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          
             >
               Skip
             </button>

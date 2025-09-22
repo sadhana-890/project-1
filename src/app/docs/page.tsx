@@ -1,8 +1,8 @@
 "use client"
 
 import React, { useState } from 'react';
-import { FileText, MessageSquare, Smartphone, Globe } from 'lucide-react';
 import Header from '../header/page';
+import Image from 'next/image';
 
 const SuperappDocs = () => {
   const [activeSection, setActiveSection] = useState('superapp-app-feature');
@@ -16,7 +16,7 @@ const SuperappDocs = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white font-inter">
       <Header/>
       
       <div className="max-w-6xl mx-auto px-6 py-8">
@@ -25,118 +25,106 @@ const SuperappDocs = () => {
           <div className="flex-1 max-w-4xl">
             {/* Superapp App Feature Section */}
             <section id="superapp-app-feature" className="mb-12">
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">Superapp App Feature</h1>
-              <p className="text-gray-600 mb-6">
+              <h1 className="text-2xl font-bold text-gray-900 mb-3">Superapp App Feature</h1>
+              <p className="text-sm text-gray-600 mb-4 leading-relaxed">
                 This page describes individual app elements and features in detail. See also:
               </p>
               
-              <ul className="text-blue-600 mb-6 space-y-1">
-                <li>• <a href="#" className="hover:underline">Advanced Interface Development</a></li>
-                <li>• <a href="#" className="hover:underline">Tips &amp; Best Practices for Developers</a></li>
+              <ul className="text-blue-600 mb-6 space-y-1 text-sm">
+                <li>• <a href="#" className="hover:underline">General Bot Platform Overview</a></li>
+                <li>• <a href="#" className="hover:underline">Full API Reference for Developers</a></li>
               </ul>
 
               {/* Input Section */}
               <div id="input" className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Input</h2>
-                <p className="text-gray-600 mb-4">
-                  Superapps let you implement all types of bots, including text, files, locations, stickers, voice messages and
-                  more. While Telegram bots support basic interfaces, Superapps give you more options for building flexible
-                  experiences that match your exact needs:
+                <h2 className="text-xl font-bold text-gray-900 mb-3">Input</h2>
+                <p className="text-sm text-gray-600 mb-3 leading-relaxed">
+                  Users can send messages of all types to bots, including text, files, locations, stickers, voice messages and
+                  even dice if they&apos;re feeling lucky. However, Telegram bots offer many other tools for building flexible
+                  interfaces tailored to your specific needs:
                 </p>
                 
-                <ul className="text-blue-600 mb-4 space-y-1">
-                  <li>• <a href="#" className="hover:underline">Commands that are registered in messages and can be selected from a list after typing &quot;/&quot;</a></li>
-                  <li>• <a href="#" className="hover:underline">Keyboards that replace the input field with predefined answer options</a></li>
-                  <li>• <a href="#" className="hover:underline">Buttons that appear inside messages sent by the bot</a></li>
+                <ul className="text-blue-600 mb-4 space-y-1 text-sm">
+                  <li>• <a href="#" className="hover:underline">Commands that are highlighted in messages and can be selected from a list after typing &quot;/&quot;</a></li>
+                  <li>• <a href="#" className="hover:underline">Keyboards that replace the user&apos;s keyboard with predefined answer options.</a></li>
+                  <li>• <a href="#" className="hover:underline">Buttons that are shown next to messages sent by the bot.</a></li>
                 </ul>
                 
-                <p className="text-gray-600 mb-6">
+                <p className="text-sm text-gray-600 mb-6 leading-relaxed">
                   For even more flexibility, Web Apps support 100% custom interfaces with JavaScript.
                 </p>
 
-                {/* Image placeholders for Input section */}
-                <div className="flex gap-4 mb-6">
-                  <div className="w-64 h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-                    <div className="w-16 h-12 bg-gray-300 rounded flex items-center justify-center">
-                      <FileText className="w-6 h-6 text-gray-500" />
-                    </div>
-                  </div>
-                  <div className="w-64 h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-                    <div className="w-16 h-12 bg-gray-300 rounded flex items-center justify-center">
-                      <MessageSquare className="w-6 h-6 text-gray-500" />
-                    </div>
-                  </div>
+                {/* Image placeholders for Input section - CENTERED */}
+                <div className="flex justify-center gap-4 mb-6">
+                  <Image src="/images/input1.svg" alt="input" width={300} height={150} className="text-gray-500" />
+                  <Image src="/images/input2.svg" alt="input" width={300} height={150} className="text-gray-500" />
                 </div>
 
-                <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
-                  <p className="text-sm text-blue-800">
-                    <strong>Note:</strong> Mini Apps can support multiple languages that adapt to the users&apos; language settings in the app.
+                <div className="border-l-4 border-purple-500 pl-4 mb-6">
+                  <p className="text-xs text-black leading-relaxed">
+                    <strong>Note:</strong> Web Apps can support multiple languages that adapt to the users&apos; language settings in the app.
                   </p>
                 </div>
               </div>
 
               {/* Mini Apps Section */}
               <div id="mini-apps" className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Mini Apps</h2>
-                <p className="text-gray-600 mb-4">
-                  Mini Apps allow developers to create infinitely flexible interfaces that can be launched inside Telegram
-                  without leaving the app.
+                <h2 className="text-xl font-bold text-gray-900 mb-3">Mini Apps</h2>
+                <p className="text-sm text-gray-600 mb-3 leading-relaxed">
+                  Mini Apps allow developers to create infinitely flexible interfaces that can be launched right inside Telegram
+                  – integrating seamlessly with the app and replacing any website.
                 </p>
                 
-                <p className="text-gray-600 mb-4">
-                  You can add a persistent launch button, videos and screenshots to help users understand what your Mini App
-                  does. You can configure this via BotFather in the Mini App section.
+                <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                  If your bot is a mini app, you can add a prominent Launch app button as well as demo videos and
+                  screenshots to the bot&apos;s profile. To do this, go to @BotFather and set up your bot&apos;s Main Mini App.
                 </p>
 
-                <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
-                  <p className="text-sm text-blue-800">
+                <div className="border-l-4 border-purple-500 pl-4 mb-6">
+                  <p className="text-xs text-black leading-relaxed">
                     Mini apps are covered in detail in our dedicated guide – you should read it carefully to learn the wide
                     variety of features they can offer.
                   </p>
                 </div>
 
-                {/* Image placeholder for Mini Apps */}
-                <div className="w-80 h-64 bg-gray-200 rounded-lg flex items-center justify-center mb-6 mx-auto">
-                  <div className="w-16 h-12 bg-gray-300 rounded flex items-center justify-center">
-                    <Smartphone className="w-6 h-6 text-gray-500" />
-                  </div>
+                {/* Mini Apps Image - CENTERED */}
+                <div className="flex justify-center mb-6">
+                  <Image src="/images/miniapps.svg" alt="mini apps" width={185} height={400} className="text-gray-500" />
                 </div>
 
-                <p className="text-gray-600 mb-6">
+                <p className="text-sm text-gray-600 mb-6 leading-relaxed">
                   If you develop a mini app, be sure to follow our design guidelines – you&apos;ll want your custom interface
-                  to integrate seamlessly into the app to provide the best possible user experience.
+                  to seamlessly integrate into the app to provide users the best possible experience.
                 </p>
               </div>
 
               {/* Language Support Section */}
               <div id="language-support" className="mb-8">
-                <h2 className="text-2xl font-semibold text-gray-900 mb-4">Language Support</h2>
-                <p className="text-gray-600 mb-4">
-                  Bots can change their interfaces to support multiple languages – updating inputs and information on the fly.
-                  A user&apos;s language code is included in every relevant update as an IETF language tag, allowing bots to adapt
+                <h2 className="text-xl font-bold text-gray-900 mb-3">Language Support</h2>
+                <p className="text-sm text-gray-600 mb-3 leading-relaxed">
+                  Bots can change their interfaces to support multiple languages – updating inputs and information on the fly. A
+                  user&apos;s language_code is included in every relevant update as an IETF language tag, allowing bots to adapt
                   accordingly.
                 </p>
                 
-                <p className="text-gray-600 mb-6">
-                  We recommend following our guidelines to provide the best user experience:
+                <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                  We recommend that you follow our guidelines to provide the best user experience:
                 </p>
 
-                <ul className="text-blue-600 mb-6 space-y-2">
-                  <li>• <a href="#" className="hover:underline">Your interfaces, texts and results should adapt seamlessly to the language_code, without user interaction.</a></li>
+                <ul className="text-blue-600 mb-6 space-y-2 text-sm">
+                  <li>• <a href="#" className="hover:underline">Your interfaces, texts and inline results should adapt seamlessly to the language_code, without user interaction.</a></li>
                   <li>• <a href="#" className="hover:underline">Commands, keyboards and messages must respect language_code values.</a></li>
-                  <li>• <a href="#" className="hover:underline">HTML5 Canvas can pass language_code if specified as a URL parameter, generated from the User object&apos;s language_code.</a></li>
+                  <li>• <a href="#" className="hover:underline">Mini Apps can obtain language information if you specify it as a URL parameter. You can generate the relevant parameter from the language_code field in the User object returned with the initData in Callback/Query.</a></li>
                   <li>• <a href="#" className="hover:underline">Your interfaces, texts and inline results should adapt seamlessly to the language_code, without user interaction.</a></li>
                 </ul>
 
-                {/* Image placeholder for Language Support */}
-                <div className="w-80 h-64 bg-gray-200 rounded-lg flex items-center justify-center mb-6 mx-auto">
-                  <div className="w-16 h-12 bg-gray-300 rounded flex items-center justify-center">
-                    <Globe className="w-6 h-6 text-gray-500" />
-                  </div>
+                {/* Language Support Image - CENTERED */}
+                <div className="flex justify-center mb-6">
+                  <Image src="/images/languageSupport.svg" alt="language support" width={743} height={390} className="text-gray-500" />
                 </div>
 
-                <div className="bg-blue-50 border-l-4 border-blue-400 p-4">
-                  <p className="text-sm text-blue-800">
+                <div className="border-l-4 border-purple-500 pl-4">
+                  <p className="text-xs text-black leading-relaxed">
                     If you target the general public, your code should always fall back to either the last recorded language tag
                     or English (en) when the field is missing for a specific user.
                   </p>
@@ -150,7 +138,7 @@ const SuperappDocs = () => {
             <nav className="space-y-1">
               <button 
                 onClick={() => scrollToSection('superapp-app-feature')}
-                className={`flex items-center text-purple-600 hover:text-purple-800 text-sm py-2 font-bold relative w-full text-left ${
+                className={`flex items-center text-purple-600 hover:text-purple-800 text-sm py-2 font-medium relative w-full text-left ${
                   activeSection === 'superapp-app-feature' ? '' : 'ml-4'
                 }`}
               >
@@ -161,7 +149,7 @@ const SuperappDocs = () => {
               </button>
               <button 
                 onClick={() => scrollToSection('input')}
-                className={`text-purple-600 hover:text-purple-800 text-sm py-2 font-bold w-full text-left ${
+                className={`text-purple-600 hover:text-purple-800 text-sm py-2 font-medium w-full text-left ${
                   activeSection === 'input' ? 'relative' : 'ml-4'
                 }`}
               >
@@ -172,7 +160,7 @@ const SuperappDocs = () => {
               </button>
               <button 
                 onClick={() => scrollToSection('mini-apps')}
-                className={`text-purple-600 hover:text-purple-800 text-sm py-2 font-bold w-full text-left ${
+                className={`text-purple-600 hover:text-purple-800 text-sm py-2 font-medium w-full text-left ${
                   activeSection === 'mini-apps' ? 'relative' : 'ml-4'
                 }`}
               >
@@ -183,7 +171,7 @@ const SuperappDocs = () => {
               </button>
               <button 
                 onClick={() => scrollToSection('language-support')}
-                className={`text-purple-600 hover:text-purple-800 text-sm py-2 font-bold w-full text-left ${
+                className={`text-purple-600 hover:text-purple-800 text-sm py-2 font-medium w-full text-left ${
                   activeSection === 'language-support' ? 'relative' : 'ml-4'
                 }`}
               >

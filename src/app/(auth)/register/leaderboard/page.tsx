@@ -52,14 +52,14 @@ export default function LeaderboardSidebar() {
     tokens: number;
     avatar: string;
     you?: boolean;
-    highlight?: "purple" | "rose";
+    highlight?: "purple" | "grey" | "orange";
   };
 
   const rows: Row[] = [
     { name: "Mike", handle: "03D__153d143", refs: 12, tokens: 8900, you: true, avatar: "/avatars/avatar1.svg" },
     { name: "Sam", handle: "03D__153d143", refs: 15, tokens: 9300, highlight: "purple", avatar: "/avatars/avatar2.svg" },
-    { name: "Ninja", handle: "03D__153d143", refs: 12, tokens: 8900, avatar: "/avatars/avatar3.svg" },
-    { name: "Thug", handle: "03D__153d143", refs: 12, tokens: 7010, highlight: "rose", avatar: "/avatars/avatar4.svg" },
+    { name: "Ninja", handle: "03D__153d143", refs: 12, tokens: 8900, highlight: "grey", avatar: "/avatars/avatar3.svg" },
+    { name: "Thug", handle: "03D__153d143", refs: 12, tokens: 7010, highlight: "orange", avatar: "/avatars/avatar4.svg" },
     { name: "Thor", handle: "03D__153d143", refs: 7, tokens: 6555, avatar: "/avatars/avatar5.svg" },
     { name: "Loki", handle: "03D__153d143", refs: 5, tokens: 5400, avatar: "/avatars/avatar6.svg" },
     { name: "Hulk", handle: "03D__153d143", refs: 3, tokens: 3200, avatar: "/avatars/avatar1.svg" },
@@ -72,9 +72,10 @@ export default function LeaderboardSidebar() {
     { name: "Cyclops", handle: "03D__153d143", refs: 0, tokens: 1500, avatar: "/avatars/avatar2.svg" },
   ];
 
-  const getRowBg = (r: { highlight?: "purple" | "rose" }) => {
-    if (r.highlight === "purple") return "bg-[#A78BFA1A]";
-    if (r.highlight === "rose") return "bg-[#FCA5A51A]";
+  const getRowBg = (r: { highlight?: "purple" | "grey" | "orange" }) => {
+    if (r.highlight === "purple") return "bg-purple-100";
+    if (r.highlight === "grey") return "bg-gray-100";
+    if (r.highlight === "orange") return "bg-orange-100";
     return "bg-slate-50";
   };
 
@@ -153,7 +154,7 @@ export default function LeaderboardSidebar() {
 
 
       <div className="relative mx-auto max-w-5xl px-4 sm:px-6 md:px-8 z-10">
-        <h1 className="text-xl md:text-3xl font-semibold text-center text-[#060535] mt-4 md:mt-6 mb-3 md:mb-4 font-inter">
+        <h1 className="text-4xl md:text-5xl font-semibold text-[#060535] mb-4 leading-snug font-inter tracking-tighter whitespace-nowrap text-center">
           Superapp Leaderboard
         </h1>
     {/* Two-column layout */}
@@ -321,7 +322,7 @@ export default function LeaderboardSidebar() {
                 {rows.map((r, idx) => (
                   <div
                     key={idx}
-                    className={`grid grid-cols-12 items-center px-2 md:px-3 py-1.5 rounded-full ${getRowBg(
+                    className={`grid grid-cols-12 items-center px-2 md:px-3 py-4 rounded-full ${getRowBg(
                       r
                     )} shadow-[inset_0_0_0_1px_rgba(0,0,0,0.03)]`}
                   >
@@ -373,7 +374,7 @@ export default function LeaderboardSidebar() {
           </h3>
           <div className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 cursor-pointer transition-colors">
             <div className="w-5 h-5 bg-black rounded-full flex items-center justify-center">
-              <Twitter className="w-2.5 h-2.5 text-white" />
+              <Image src="/images/twitter.svg" alt="twitter" width={10} height={10} className="text-white"/>
             </div>
             <span className="text-xs">Twitter</span>
           </div>

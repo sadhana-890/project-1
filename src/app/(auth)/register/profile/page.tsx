@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '@/app/header/page';
@@ -34,7 +33,7 @@ const ProfileCreationPage: React.FC = () => {
       <div className="flex-1 flex justify-center px-4 py-8">
         <div className="max-w-md w-full space-y-6">
           <div className="text-center">
-            <h1 className="text-3xl md:text-4xl font-semibold text-gray-900 mb-3 font-inter">
+            <h1 className="text-4xl md:text-5xl font-semibold text-[#060535] mb-4 leading-snug font-inter tracking-tighter whitespace-nowrap">
               Create your Superapp profile
             </h1>
             <p className="text-gray-600 text-sm">
@@ -60,6 +59,7 @@ const ProfileCreationPage: React.FC = () => {
               <Button
                 onClick={handleContinue}
                 disabled={!fullName.trim() || isLoading}
+                className='rounded-[3px] py-5 px-6'
               >
                 {isLoading ? "Saving..." : "Continue"}
               </Button>

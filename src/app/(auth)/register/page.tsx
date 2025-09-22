@@ -4,9 +4,11 @@ import Footer from '@/app/footer/page';
 import Header from '@/app/header/page';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
+
+
 
 import { useSendOtpMutation } from '@/services/otpApi';
 import { 
@@ -83,8 +85,21 @@ const PhoneVerificationPage = () => {
     country: 'United States',
     iso: 'US'
   });
-  const [showDropdown, setShowDropdown] = useState(false);
+  
+  // Updated dropdown states to match Figma behavior
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [showSelected, setShowSelected] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [countriesLoading, setCountriesLoading] = useState(true);
+  
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Filter countries based on search term
+  const filteredCountries = countries.filter(country =>
+    country.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    country.code.includes(searchTerm)
+  );
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -137,6 +152,20 @@ const PhoneVerificationPage = () => {
       dispatch(clearError());
     }
   }, [phoneNumber, dispatch]);
+
+  // Updated click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+        setShowSelected(false);
+        setSearchTerm('');
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Helper function to extract error message with proper type checking
   const getErrorMessage = (error: unknown): string => {
@@ -257,9 +286,23 @@ const PhoneVerificationPage = () => {
     }
   };
 
+  // Updated dropdown toggle logic to match Figma behavior
+  const handleDropdownToggle = () => {
+    if (isDropdownOpen) {
+      setIsDropdownOpen(false);
+      setShowSelected(true);
+    } else if (showSelected) {
+      setShowSelected(false);
+    } else {
+      setIsDropdownOpen(true);
+    }
+  };
+
   const handleCountrySelect = (country: Country) => {
     setSelectedCountry(country);
-    setShowDropdown(false);
+    setIsDropdownOpen(false);
+    setShowSelected(false);
+    setSearchTerm('');
   };
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -271,32 +314,15 @@ const PhoneVerificationPage = () => {
     }
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (!target.closest('.country-dropdown')) {
-        setShowDropdown(false);
-      }
-    };
-
-    if (showDropdown) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showDropdown]);
-
   const isSubmitting = loading || isSendingOtp;
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-white font-inter">
       <Header />
       <main className="flex-1 flex justify-center px-4 py-8 sm:py-12">
         <div className="max-w-md w-full space-y-6">
           <div className="text-center">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-900 mb-3 font-inter">
+            <h1 className="text-4xl md:text-5xl font-semibold text-[#060535] mb-4 leading-snug font-inter tracking-tighter whitespace-nowrap">
               Verify Your Phone
             </h1>
             <p className="text-gray-600 text-sm sm:text-base">
@@ -325,8 +351,8 @@ const PhoneVerificationPage = () => {
                 Phone Number
               </label>
               
-              {/* Container matching the exact design */}
-              <div className="relative country-dropdown">
+              {/* Updated phone input container to match Figma exactly */}
+              <div className="relative" ref={dropdownRef}>
                 <div className="flex items-center w-full px-4 py-4 border border-gray-300 rounded-xl bg-white focus-within:ring-2 focus-within:ring-purple-500 focus-within:border-transparent transition-all">
                   
                   {/* Flag */}
@@ -336,8 +362,7 @@ const PhoneVerificationPage = () => {
                       alt={`Flag of ${selectedCountry.country}`}
                       width={24}
                       height={16}
-                      className="object-cover mr-3 flex-shrink-0"
-                      onError={handleImageError}
+                      className="object-cover mr-3 flex-shrink-0 rounded"
                     />
                   ) : (
                     <span className="text-lg mr-3 flex-shrink-0">
@@ -350,73 +375,152 @@ const PhoneVerificationPage = () => {
                     type="button"
                     onClick={(e) => {
                       e.stopPropagation();
-                      setShowDropdown(!showDropdown);
+                      handleDropdownToggle();
                     }}
                     disabled={isSubmitting}
                     className="flex items-center justify-center p-1 hover:bg-gray-50 rounded transition-colors disabled:opacity-50 mr-3"
                   >
-                    <Image 
-                      src="/icons/dropdown.svg" 
-                      alt="Dropdown arrow"
-                      width={18}
-                      height={18}
+                       
+                  <div className="w-3 h-4 relative">
+                    <Image
+                      src="/icons/dropdown.svg"
+                      alt="dropdown"
+                      fill
                       className="object-contain"
                     />
+                  </div>
+
                   </button>
                   
-                  {/* Country code and phone input combined */}
+                  {/* Country code and phone input combined with minimal gap */}
                   <div className="flex items-center flex-1 min-w-0">
-                    <span className="text-gray-950 font-normal mr-1 flex-shrink-0">
+                    <span className="text-gray-950 font-normal flex-shrink-0">
                       {selectedCountry.code}
                     </span>
                     <input
+                      ref={inputRef}
                       type="tel"
                       value={phoneNumber}
                       onChange={(e) => setPhoneNumber(e.target.value)}
-                      onFocus={() => setShowDropdown(false)}
-                      onClick={() => setShowDropdown(false)}
-                      placeholder="Enter phone number"
+                      onFocus={() => {
+                        setIsDropdownOpen(false);
+                        setShowSelected(false);
+                      }}
+                      onClick={() => {
+                        setIsDropdownOpen(false);
+                        setShowSelected(false);
+                      }}
+                      placeholder="(202) 555-0198"
                       disabled={isSubmitting}
-                      className="flex-1 px-2 py-0 outline-none text-gray-950 font-normal placeholder-gray-500 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed min-w-0"
+                      className="flex-1 px-1 py-0 outline-none text-gray-950 font-normal placeholder-gray-400 bg-transparent disabled:opacity-50 disabled:cursor-not-allowed min-w-0"
                     />
                   </div>
                 </div>
                 
-                {/* Dropdown menu */}
-                {showDropdown && (
-                  <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-200 rounded-xl shadow-lg z-10 max-h-48 overflow-y-auto">
-                    {countriesLoading ? (
-                      <div className="px-4 py-3 text-center text-gray-500 text-sm">
-                        Loading countries...
-                      </div>
-                    ) : (
-                      countries.map((country, index) => (
-                        <button
-                          key={index}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCountrySelect(country);
-                          }}
-                          className="w-full flex items-center px-4 py-3 hover:bg-gray-50 text-left text-sm transition-colors"
-                        >
-                          {country.flagImage ? (
+                {/* Country dropdown - positioned below input, 1/3 width of input */}
+                {(showSelected || isDropdownOpen) && (
+                  <div className="absolute z-50 mt-2" style={{ left: '0px' }}>
+                    {/* Selected Country Section - Separate box with BLUE border, NO background */}
+                    <div 
+                      className="bg-white border-2 border-blue-500 rounded-lg shadow-sm mb-2"
+                      style={{ width: '33.33%', minWidth: '200px' }}
+                    >
+                      <button 
+                        onClick={() => {
+                          setIsDropdownOpen(false);
+                          setShowSelected(false);
+                        }}
+                        className="w-full flex items-center justify-between px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors"
+                      >
+                        <div className="flex items-center space-x-2">
+                          {selectedCountry.flagImage ? (
                             <Image 
-                              src={country.flagImage} 
-                              alt={`Flag of ${country.country}`}
+                              src={selectedCountry.flagImage} 
+                              alt={`Flag of ${selectedCountry.country}`}
                               width={20}
                               height={12}
-                              className="object-cover rounded mr-3 flex-shrink-0"
-                              onError={handleImageError}
+                              className="object-cover rounded flex-shrink-0"
                             />
                           ) : (
-                            <span className="text-base mr-3 flex-shrink-0">
-                              {country.flag}
-                            </span>
+                            <span className="text-sm flex-shrink-0">{selectedCountry.flag}</span>
                           )}
-                          <span className="flex-1 text-gray-900 truncate">{country.country}</span>
-                          <span className="text-gray-900 ml-2 flex-shrink-0 ">{country.code}</span>
-                        </button>
-                      ))
+                          <span className="text-sm font-medium text-black">{selectedCountry.code}</span>
+                          <span className="text-sm text-gray-400 truncate">{selectedCountry.country}</span>
+                        </div>
+                        <div className="w-2 h-2 relative">
+                          <Image
+                            src="/icons/dropup.svg"
+                            alt="dropup"
+                            fill
+                            className="object-contain"
+                          />
+                        </div>
+                      </button>
+                    </div>
+
+                    {/* Countries Dropdown List - Only show when fully expanded */}
+                    {isDropdownOpen && (
+                      <div 
+                        className="bg-white border border-gray-300 rounded-lg shadow-lg"
+                        style={{ width: '33.33%', minWidth: '200px', maxHeight: '300px' }}
+                      >
+                        {/* Search Input - Fixed alignment */}
+                        <div className="px-3 py-1 border-b border-gray-200">
+                          <div className="relative flex items-center">
+                            <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                              <Image src="/icons/search.svg" alt="search" width={12} height={12} />
+                            </div>
+                            <input
+                              type="text"
+                              placeholder="Search"
+                              value={searchTerm}
+                              onChange={(e) => setSearchTerm(e.target.value)}
+                              className="w-full pl-10 pr-4 py-2 bg-transparent text-sm focus:outline-none placeholder-gray-500"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Countries List */}
+                        <div className="max-h-48 overflow-y-auto">
+                          {countriesLoading ? (
+                            <div className="px-4 py-3 text-center text-gray-500 text-sm">
+                              Loading countries...
+                            </div>
+                          ) : filteredCountries.length === 0 ? (
+                            <div className="px-4 py-3 text-center text-gray-500 text-sm">
+                              No countries found
+                            </div>
+                          ) : (
+                            filteredCountries.map((country, index) => (
+                              <button
+                                key={`${country.iso}-${index}`}
+                                onClick={() => handleCountrySelect(country)}
+                                className={`w-full flex items-center space-x-3 px-4 py-2.5 text-left hover:bg-blue-50 transition-colors ${
+                                  country.code === selectedCountry.code ? 'bg-blue-50' : ''
+                                }`}
+                              >
+                                {country.flagImage ? (
+                                  <Image 
+                                    src={country.flagImage} 
+                                    alt={`Flag of ${country.country}`}
+                                    width={20}
+                                    height={12}
+                                    className="object-cover rounded flex-shrink-0"
+                                  />
+                                ) : (
+                                  <span className="text-sm flex-shrink-0">{country.flag}</span>
+                                )}
+                                <span className={`text-sm truncate ${
+                                  country.code === selectedCountry.code ? 'text-black' : 'text-gray-400'
+                                }`}>{country.country}</span>
+                                <span className={`text-sm flex-shrink-0 ${
+                                  country.code === selectedCountry.code ? 'text-black' : 'text-gray-400'
+                                }`}>{country.code}</span>
+                              </button>
+                            ))
+                          )}
+                        </div>
+                      </div>
                     )}
                   </div>
                 )}
@@ -424,17 +528,17 @@ const PhoneVerificationPage = () => {
             </div>
 
             <div className="flex items-start space-x-3">
-            <input
-              type="checkbox"
-              id="terms"
-              checked={agreed}
-              onChange={(e) => setAgreed(e.target.checked)}
-              disabled={isSubmitting}
-              className="mt-0.5 w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500 disabled:opacity-50"
-            />
+              <input
+                type="checkbox"
+                id="terms"
+                checked={agreed}
+                onChange={(e) => setAgreed(e.target.checked)}
+                disabled={isSubmitting}
+                className="mt-0.5 w-4 h-4 text-purple-600 border-gray-300 rounded focus:ring-purple-500 disabled:opacity-50"
+              />
               <label htmlFor="terms" className="text-sm text-gray-600 leading-relaxed">
                 I agree to the{' '}
-                <a href="#" className="text-purple-600 hover:text-purple-700 underline">
+                <a href="#" className="text-blue-600 hover:text-blue-700 underline">
                   Terms of Use
                 </a>{' '}
                 of Superapp
@@ -445,7 +549,9 @@ const PhoneVerificationPage = () => {
               <Button
                 onClick={handleSendCode}
                 disabled={!phoneNumber || !agreed || isSubmitting}
-                className="  sm:w-auto min-w-32  disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium py-3 px-8 rounded-[3px] transition-all duration-200 flex items-center justify-center"
+                className={`py-3 px-8 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-medium transition-all duration-200 flex items-center justify-center ${
+                  agreed && phoneNumber ? 'rounded-lg' : 'rounded-full'
+                }`}
               >
                 {isSubmitting ? (
                   <>
@@ -467,5 +573,4 @@ const PhoneVerificationPage = () => {
     </div>
   );
 };
-
 export default PhoneVerificationPage;
